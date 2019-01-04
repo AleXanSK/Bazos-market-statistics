@@ -1,0 +1,1 @@
+# Zatiaľ som nezačal
