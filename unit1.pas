@@ -11,13 +11,23 @@ uses
 type
 
   { TForm1 }
+  nazvy_stat = record
+    typ:string;
+    id:integer;
+    //TU SI SKONČIL
+  end;
 
   TForm1 = class(TForm)
-    Button1: TButton;
+    Filter: TButton;
+    Memo1: TMemo;
+    MenuItem2: TMenuItem;
+    Podlamena: TMenuItem;
+    Podlakodu: TMenuItem;
+    Vytvaranie_TOP: TTimer;
+    Zobrazujem: TLabel;
     Reload: TButton;
     Chart1: TChart;
     Ine: TCheckBox;
-    Memo1: TMemo;
     Priemercena: TLabel;
     Label2: TLabel;
     Pecivo: TCheckBox;
@@ -36,6 +46,8 @@ type
     poT10: TMenuItem;
     MenuItem4: TMenuItem;
     procedure FormCreate(Sender: TObject);
+    procedure PodlakoduClick(Sender: TObject);
+    procedure PodlamenaClick(Sender: TObject);
     procedure poT10Click(Sender: TObject);
     procedure Top10Click(Sender: TObject);
   private
@@ -53,6 +65,23 @@ implementation
 
 { TForm1 }
 
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+memo1.clear;
+
+
+end;
+
+procedure TForm1.PodlakoduClick(Sender: TObject);
+begin
+
+end;
+
+procedure TForm1.PodlamenaClick(Sender: TObject);
+begin
+
+end;
+
 procedure TForm1.Top10Click(Sender: TObject);
 begin
 
@@ -63,10 +92,7 @@ begin
 
 end;
 
-procedure TForm1.FormCreate(Sender: TObject);
-begin
 
-end;
 
 end.
 

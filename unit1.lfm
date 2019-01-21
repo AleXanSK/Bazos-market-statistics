@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 587
+  Left = 638
   Height = 536
-  Top = 176
+  Top = 143
   Width = 724
   Caption = 'Form1'
   ClientHeight = 516
@@ -73,7 +73,7 @@ object Form1: TForm1
     Caption = 'Náklady: xxxx'
     ParentColor = False
   end
-  object Button1: TButton
+  object Filter: TButton
     Left = 568
     Height = 28
     Top = 136
@@ -172,22 +172,30 @@ object Form1: TForm1
     )
     ParentColor = False
   end
-  object Memo1: TMemo
-    Left = 19
-    Height = 309
-    Top = 112
-    Width = 306
-    Lines.Strings = (
-      'Memo1'
-    )
-    TabOrder = 8
-  end
   object Reload: TButton
     Left = 623
     Height = 25
     Top = 472
     Width = 80
     Caption = 'Reload'
+    TabOrder = 8
+  end
+  object Zobrazujem: TLabel
+    Left = 19
+    Height = 15
+    Top = 416
+    Width = 149
+    Caption = 'Zobrazujem: xxxxxxxxxxxxxxxx'
+    ParentColor = False
+  end
+  object Memo1: TMemo
+    Left = 19
+    Height = 300
+    Top = 112
+    Width = 306
+    Lines.Strings = (
+      'Memo1'
+    )
     TabOrder = 9
   end
   object MainMenu1: TMainMenu
@@ -206,11 +214,25 @@ object Form1: TForm1
         Caption = '10 najmenej predávaných'
         OnClick = poT10Click
       end
+      object MenuItem2: TMenuItem
+      end
+      object Podlakodu: TMenuItem
+        Caption = 'Tovar podla kódu'
+        OnClick = PodlakoduClick
+      end
+      object Podlamena: TMenuItem
+        Caption = 'Tovar podľa názvu'
+        OnClick = PodlamenaClick
+      end
     end
   end
   object Kontrola_suborov: TTimer
     Interval = 10005
     left = 104
+    top = 464
+  end
+  object Vytvaranie_TOP: TTimer
+    left = 200
     top = 464
   end
 end

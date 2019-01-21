@@ -13,11 +13,12 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
-    Button1: TButton;
+    Filter: TButton;
+    ListBox1: TListBox;
+    Zobrazujem: TLabel;
     Reload: TButton;
     Chart1: TChart;
     Ine: TCheckBox;
-    Memo1: TMemo;
     Priemercena: TLabel;
     Label2: TLabel;
     Pecivo: TCheckBox;
@@ -53,6 +54,13 @@ implementation
 
 { TForm1 }
 
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+listbox1.clear;
+
+
+end;
+
 procedure TForm1.Top10Click(Sender: TObject);
 begin
 
@@ -63,10 +71,7 @@ begin
 
 end;
 
-procedure TForm1.FormCreate(Sender: TObject);
-begin
 
-end;
 
 end.
 
