@@ -1,0 +1,216 @@
+object Form1: TForm1
+  Left = 528
+  Height = 536
+  Top = 237
+  Width = 724
+  Caption = 'Form1'
+  ClientHeight = 516
+  ClientWidth = 724
+  Menu = MainMenu1
+  OnCreate = FormCreate
+  LCLVersion = '1.4.0.4'
+  object Oddatum: TDateTimePicker
+    Left = 528
+    Height = 23
+    Top = 24
+    Width = 79
+    CenturyFrom = 1941
+    MaxDate = 2958465
+    MinDate = -53780
+    TabOrder = 0
+    TrailingSeparator = False
+    TextForNullDate = 'NULL'
+    LeadingZeros = True
+    Kind = dtkDate
+    TimeFormat = tf24
+    TimeDisplay = tdHMS
+    DateMode = dmComboBox
+    Date = 43486
+    Time = 0.578475069443812
+    UseDefaultSeparators = True
+    HideDateTimeParts = []
+    MonthNames = 'Long'
+  end
+  object PoDatum: TDateTimePicker
+    Left = 624
+    Height = 23
+    Top = 24
+    Width = 79
+    CenturyFrom = 1941
+    MaxDate = 2958465
+    MinDate = -53780
+    TabOrder = 1
+    TrailingSeparator = False
+    TextForNullDate = 'NULL'
+    LeadingZeros = True
+    Kind = dtkDate
+    TimeFormat = tf24
+    TimeDisplay = tdHMS
+    DateMode = dmComboBox
+    Date = 43486
+    Time = 0.578554756946687
+    UseDefaultSeparators = True
+    HideDateTimeParts = []
+    MonthNames = 'Long'
+  end
+  object trzby: TLabel
+    AnchorSideRight.Side = asrBottom
+    Left = 270
+    Height = 15
+    Top = 8
+    Width = 55
+    Anchors = [akTop, akRight]
+    Caption = 'Tržby: xxxx'
+    ParentColor = False
+  end
+  object naklady: TLabel
+    AnchorSideRight.Side = asrBottom
+    Left = 256
+    Height = 15
+    Top = 32
+    Width = 69
+    Anchors = [akTop, akRight]
+    Caption = 'Náklady: xxxx'
+    ParentColor = False
+  end
+  object Button1: TButton
+    Left = 568
+    Height = 28
+    Top = 136
+    Width = 72
+    Caption = 'Filtrovať'
+    TabOrder = 2
+  end
+  object Label3: TLabel
+    Left = 528
+    Height = 15
+    Top = 8
+    Width = 16
+    Caption = 'Od'
+    ParentColor = False
+  end
+  object Label4: TLabel
+    Left = 624
+    Height = 15
+    Top = 8
+    Width = 15
+    Caption = 'Do'
+    ParentColor = False
+  end
+  object Ovocie: TCheckBox
+    Left = 528
+    Height = 19
+    Top = 72
+    Width = 57
+    Caption = 'Ovocie'
+    TabOrder = 3
+  end
+  object Zelenina: TCheckBox
+    Left = 624
+    Height = 19
+    Top = 72
+    Width = 65
+    Caption = 'Zelenina'
+    TabOrder = 4
+  end
+  object Pecivo: TCheckBox
+    Left = 528
+    Height = 19
+    Top = 107
+    Width = 55
+    Caption = 'Pečivo'
+    TabOrder = 5
+  end
+  object Ine: TCheckBox
+    Left = 624
+    Height = 19
+    Top = 107
+    Width = 36
+    Caption = 'Iné'
+    TabOrder = 6
+  end
+  object Priemercena: TLabel
+    AnchorSideRight.Side = asrBottom
+    Left = 217
+    Height = 15
+    Top = 56
+    Width = 108
+    Anchors = [akTop, akRight]
+    Caption = 'Priemerna cena: xxxx'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    AnchorSideRight.Side = asrBottom
+    Left = 200
+    Height = 15
+    Top = 80
+    Width = 125
+    Anchors = [akTop, akRight]
+    Caption = 'Priemerna kvantita: xxxx'
+    ParentColor = False
+  end
+  object Chart1: TChart
+    Left = 453
+    Height = 250
+    Top = 192
+    Width = 250
+    AxisList = <    
+      item
+        Minors = <>
+        Title.LabelFont.Orientation = 900
+      end    
+      item
+        Alignment = calBottom
+        Minors = <>
+      end>
+    Foot.Brush.Color = clBtnFace
+    Foot.Font.Color = clBlue
+    Title.Brush.Color = clBtnFace
+    Title.Font.Color = clBlue
+    Title.Text.Strings = (
+      'TAChart'
+    )
+    ParentColor = False
+  end
+  object Memo1: TMemo
+    Left = 19
+    Height = 309
+    Top = 112
+    Width = 306
+    Lines.Strings = (
+      'Memo1'
+    )
+    TabOrder = 8
+  end
+  object Reload: TButton
+    Left = 623
+    Height = 25
+    Top = 488
+    Width = 80
+    Caption = 'Reload'
+    TabOrder = 9
+  end
+  object MainMenu1: TMainMenu
+    left = 24
+    top = 464
+    object MenuItem1: TMenuItem
+      Caption = 'Tovar'
+      object MenuItem4: TMenuItem
+        Caption = 'Zobraz:'
+      end
+      object Top10: TMenuItem
+        Caption = '10 najviac predávaných'
+        OnClick = Top10Click
+      end
+      object poT10: TMenuItem
+        Caption = '10 najmenej predávaných'
+        OnClick = poT10Click
+      end
+    end
+  end
+  object Kontrola_suborov: TTimer
+    Interval = 10005
+    left = 104
+    top = 464
+  end
+end
