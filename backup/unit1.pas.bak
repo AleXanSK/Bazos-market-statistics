@@ -5,7 +5,7 @@ unit Unit1;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, DateTimePicker, TAGraph, Forms, Controls,
+  Classes, SysUtils, FileUtil, DateTimePicker,  Forms, Controls,
   Graphics, Dialogs, Menus, StdCtrls, ExtCtrls;
 
 type
@@ -29,7 +29,6 @@ type
     Vytvaranie_TOP: TTimer;
     Zobrazujem: TLabel;
     Reload: TButton;
-    Chart1: TChart;
     Ine: TCheckBox;
     Priemercena: TLabel;
     Label2: TLabel;
@@ -53,6 +52,7 @@ type
     procedure PodlamenaClick(Sender: TObject);
     procedure poT10Click(Sender: TObject);
     procedure Top10Click(Sender: TObject);
+    procedure nacitanie;
   private
 
   public
@@ -61,7 +61,6 @@ type
 
 var
   Form1: TForm1;
-  subor:textfile;
   ver_stati:integer; //verzie databaz
   ver_tovar:integer; //
 
@@ -77,10 +76,59 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 var pom_s:string;                   //pomocna pri nacitani
+    i,j,temp:integer;
+    test:boolean;
+begin
+memo1.clear;
+nacitanie;
+
+
+
+//Bubble sortik z netu (prosim funguj)
+{
+ For i := stats_length-1 DownTo 1 do
+ 		For j := 2 to i do
+ 			If (stats[j-1] > stats[j]) Then
+ 			Begin
+ 				temp := stats[j-1];
+ 				stats[j-1] := stats[j];
+ 				stats[j] := temp;
+ 			End;
+}
+end;
+
+procedure TForm1.PodlakoduClick(Sender: TObject);
+begin
+memo1.clear;
+end;
+
+procedure TForm1.PodlamenaClick(Sender: TObject);
+begin
+memo1.clear;
+end;
+
+procedure TForm1.Top10Click(Sender: TObject);
+var
     i:integer;
 begin
 memo1.clear;
+for i:=stats_length downto 1 do begin
+   // memo1.append(IntTostr(stats[i].mozstvo)+' '+
 
+end;
+
+end;
+
+procedure TForm1.poT10Click(Sender: TObject);
+begin
+memo1.clear;
+end;
+
+procedure TForm1.nacitanie;
+var subor:textfile;
+    pom_s:string;                   //pomocna pri nacitani
+    i,j,temp:integer;
+begin
 FileCreate('statistiky_lock.txt'); //zmakne databazu
 Assignfile(subor,'statistiky.txt');
 Reset(subor);
@@ -104,33 +152,10 @@ for i:=1 to stats_length do begin
       Delete                                         (pom_s,1,Pos(';',pom_s));
 
       stats[i].cena:=StrToInt(Copy                   (pom_s,1,Length(pom_s)));
-      end; //KONIEC načítania
+      end; //KONIEC načítania statistik
 CloseFile(subor);
 DeleteFile('statistiky_lock.txt');
-
 end;
-
-procedure TForm1.PodlakoduClick(Sender: TObject);
-begin
-memo1.clear;
-end;
-
-procedure TForm1.PodlamenaClick(Sender: TObject);
-begin
-memo1.clear;
-end;
-
-procedure TForm1.Top10Click(Sender: TObject);
-begin
-memo1.clear;
-Memo1.append(
-end;
-
-procedure TForm1.poT10Click(Sender: TObject);
-begin
-memo1.clear;
-end;
-
 
 
 end.
