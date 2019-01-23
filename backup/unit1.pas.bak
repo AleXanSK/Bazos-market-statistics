@@ -112,22 +112,23 @@ end;
 
 procedure TForm1.PodlakoduClick(Sender: TObject);
 begin
-
+memo1.clear;
 end;
 
 procedure TForm1.PodlamenaClick(Sender: TObject);
 begin
-
+memo1.clear;
 end;
 
 procedure TForm1.Top10Click(Sender: TObject);
 begin
-
+memo1.clear;
+Memo1.append(
 end;
 
 procedure TForm1.poT10Click(Sender: TObject);
 begin
-
+memo1.clear;
 end;
 
 

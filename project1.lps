@@ -19,7 +19,7 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="96"/>
+        <TopLine Value="100"/>
         <CursorPos X="14" Y="126"/>
         <UsageCount Value="28"/>
         <Loaded Value="True"/>
@@ -27,7 +27,6 @@
       </Unit1>
       <Unit2>
         <Filename Value="D:\Lazarus\fpc\2.6.4\source\rtl\objpas\objpas.pp"/>
-        <UnitName Value="objpas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="8" Y="28"/>
         <UsageCount Value="10"/>
