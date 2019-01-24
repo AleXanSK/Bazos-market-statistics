@@ -195,12 +195,14 @@ for i:=1 to dlzka do begin
 CloseFile(subor);
 DeleteFile('tovar_lock.txt');
 
+sort;
 end;
 
 
 procedure TForm1.sort;
 var i,j,temp:integer;
 begin
+top;
 //Bubble sortik z netu (prosim funguj)
   For i:=1 to top_length do topp[i].zisk:=(topp[i].prijmy-topp[i].naklad); //spraví zisk pre každy tovar
 

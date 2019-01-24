@@ -37,13 +37,13 @@ type
     Vytvaranie_TOP: TTimer;
     Zobrazujem: TLabel;
     Reload: TButton;
-    Ine: TCheckBox;
+    filter4: TCheckBox;
     Priemercena: TLabel;
     Label2: TLabel;
-    Pecivo: TCheckBox;
-    Ovocie: TCheckBox;
+    filter3: TCheckBox;
+    filter1: TCheckBox;
     Kontrola_suborov: TTimer;
-    Zelenina: TCheckBox;
+    filter2: TCheckBox;
     Oddatum: TDateTimePicker;
     PoDatum: TDateTimePicker;
     trzby: TLabel;
@@ -123,8 +123,8 @@ var
     i:integer;
 begin
 memo1.clear;
-for i:=stats_length downto 1 do begin
-  //  memo1.append(
+for i:=1 to 10 do begin
+  memo1.append(topp[i].meno
 
 end;
 
@@ -133,10 +133,12 @@ end;
 procedure TForm1.poT10Click(Sender: TObject);
 begin
 memo1.clear;
+memo1.Append();
 end;
 
 procedure TForm1.ReloadClick(Sender: TObject);
 begin
+memo1.clear;
   nacitanie;
 end;
 
@@ -152,7 +154,7 @@ Readln(subor,pom_s);
 stats_length:=strtoint(pom_s);
 
 for i:=1 to stats_length do begin
-      ReadLn(subor,pom_s); //N;12345678;111;12;100;   -priklad
+      ReadLn(subor,pom_s); //N;12345678;111;12;100;991231   -priklad
 
 
       stats[i].typ:=Copy                             (pom_s,1,1); //vždy len jeden znak
@@ -200,7 +202,8 @@ end;
 
 
 procedure TForm1.sort;
-var i,j,temp:integer;
+var i,j,temp_kod,temp_prijmy,temp_naklad,temp_zisk:integer;
+    temp_meno:string;
 begin
 top;
 //Bubble sortik z netu (prosim funguj)
@@ -210,9 +213,27 @@ top;
   		For j := 2 to i do
   			If (topp[j-1].zisk > topp[j].zisk) Then
   			Begin
-  				temp := topp[j-1].zisk;
-  				topp[j-1].zisk := topp[j].zisk;
-  				topp[j].zisk := temp;
+                                temp_kod   := topp[j-1].kod;
+                                temp_prijmy:= topp[j-1].prijmy;
+                                temp_naklad:= topp[j-1].naklad;
+                                temp_zisk  := topp[j-1].zisk;
+                                temp_meno  := topp[j-1].meno;
+
+  				topp[j-1].kod   := topp[j].kod;
+                                topp[j-1].prijmy:= topp[j].prijmy;
+                                topp[j-1].naklad:= topp[j].naklad;
+                                topp[j-1].zisk  := topp[j].zisk;
+                                topp[j-1].meno  := topp[j].meno;
+
+
+
+  				topp[j].kod     := temp_kod;
+                                topp[j].prijmy  := temp_prijmy;
+                                topp[j].naklad  := temp_naklad;
+                                topp[j].zisk    := temp_zisk;
+                                topp[j].meno    := temp_meno;
+
+
   			End;
 
 
