@@ -155,6 +155,7 @@ object Form1: TForm1
     Top = 472
     Width = 80
     Caption = 'Reload'
+    OnClick = ReloadClick
     TabOrder = 7
   end
   object Zobrazujem: TLabel
