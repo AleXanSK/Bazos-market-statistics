@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, DateTimePicker,  Forms, Controls,
-  Graphics, Dialogs, Menus, StdCtrls, ExtCtrls;
+  Graphics, Dialogs, Menus, StdCtrls, ExtCtrls, LazFileUtils;
 
 type
 
@@ -30,6 +30,7 @@ type
 
   TForm1 = class(TForm)
     Filter: TButton;
+    zisk: TLabel;
     Memo1: TMemo;
     MenuItem2: TMenuItem;
     Podlamena: TMenuItem;
@@ -92,19 +93,18 @@ var i:integer;
 begin
 memo1.clear;
 //Vyčistenie polí
-{
+
  for i:=1 to 100 do begin
        stats[i].id:=0;
        stats[i].kod:=0;
        stats[i].mnozstvo:=0;
        stats[i].cena:=0;
-       top[i].kod:=0;
-       top[i].prijmy:=0;
-       top[i].naklad:=0;
-       top[i].zisk:=0;
-       top[i].id:=0;
+       topp[i].kod:=0;
+       topp[i].prijmy:=0;
+       topp[i].naklad:=0;
+       topp[i].zisk:=0;
  end;
-}
+
 NACITANIE;
 end;
 
@@ -124,16 +124,20 @@ var
 begin
 memo1.clear;
 for i:=1 to 10 do begin
-  memo1.append(topp[i].meno
-
+  memo1.append(inttostr(i)+'.  '+topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
 end;
+zobrazujem.caption:='Zobrazujem: Top 10 najpredavánejších produktov';
 
 end;
 
 procedure TForm1.poT10Click(Sender: TObject);
+var i:integer;
 begin
 memo1.clear;
-memo1.Append();
+for i:=top_length downto top_length-10 do begin
+  memo1.append(inttostr(i)+'.  '+topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
+end;
+zobrazujem.caption:='Zobrazujem: Top 10 najmenej predávaných produktov';
 end;
 
 procedure TForm1.ReloadClick(Sender: TObject);
@@ -146,8 +150,9 @@ procedure TForm1.nacitanie;
 var subor:textfile;
     pom_s,meno:string;                   //pomocna pri nacitani
     i,j,dlzka,kod:integer;
+    F:longint;                           //potrebuje to funkcia filedelete()
 begin
-FileCreate('statistiky_lock.txt'); //zmakne databazu
+F:=FileCreate('statistiky_lock.txt'); //zmakne databazu
 Assignfile(subor,'statistiky.txt');
 Reset(subor);
 Readln(subor,pom_s);
@@ -172,11 +177,12 @@ for i:=1 to stats_length do begin
       stats[i].cena:=StrToInt(Copy                   (pom_s,1,Length(pom_s)));
       end; //KONIEC načítania statistik
 CloseFile(subor);
+FileClose(F);
 DeleteFile('statistiky_lock.txt');
 
 
 Assignfile(subor,'tovar.txt'); //ZACIATOK nacitania tovar (meno)
-FileCreate('statistiky_lock.txt'); //zamkne tovar
+F:=FileCreate('tovar_lock.txt'); //zamkne tovar
 Reset(subor);
 Readln(subor,pom_s);
 dlzka:=strtoint(pom_s); //zisti velkost tovar.txt
@@ -195,6 +201,7 @@ for i:=1 to dlzka do begin
 
       end; //KONIEC načítania statistik
 CloseFile(subor);
+FileClose(F);
 DeleteFile('tovar_lock.txt');
 
 sort;
@@ -242,6 +249,7 @@ end;
 
 procedure TForm1.top; {Pridava celkove naklady a celkove prijmy do top[i]}
 var i,j:integer;
+    naklady_p,trzby_p,zisk_p,priemerna_cena,priemerna_kvantita:integer;
 begin
   for i:=1 to stats_length do begin
      for j:=1 to top_length do begin
@@ -261,6 +269,18 @@ begin
         end;
      end;
   end;
+
+
+  //Dava celkove naklady a nakup a zisk
+  naklady_p:=0;trzby_p:=0;zisk_p:=0;priemerna_cena:=0;priemerna_kvantita:=0; //inicializacia premennych
+  for i:=1 to top_length do begin
+     naklady_p:=naklady_p+topp[i].naklad;
+     trzby_p:=trzby_p+topp[i].prijmy;
+
+  end;
+     trzby.caption:=         'Tržby: '+InttoStr(trzby_p);
+     naklady.caption:=       'Náklady: '+IntToStr(naklady_p);
+     zisk.caption:=          'Zisk: '+IntToStr(trzby_p-naklady_p);
 end;
 
 end.
