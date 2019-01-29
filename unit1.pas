@@ -18,7 +18,7 @@ type
     mnozstvo:integer;
     cena:integer;
     meno:string;
-//    datum:integer;
+    datum:integer;
    end;
   nazvy_top = record
     meno:string;
@@ -151,60 +151,107 @@ var subor:textfile;
     pom_s,meno:string;                   //pomocna pri nacitani
     i,j,dlzka,kod:integer;
     F:longint;                           //potrebuje to funkcia filedelete()
+    dokoncenenacitanie:boolean;
 begin
-F:=FileCreate('statistiky_lock.txt'); //zmakne databazu
-Assignfile(subor,'statistiky.txt');
-Reset(subor);
-Readln(subor,pom_s);
-stats_length:=strtoint(pom_s);
-
-for i:=1 to stats_length do begin
-      ReadLn(subor,pom_s); //N;12345678;111;12;100;991231   -priklad
+dokoncenenacitanie:=false;
 
 
-      stats[i].typ:=Copy                             (pom_s,1,1); //vždy len jeden znak
-      Delete                                         (pom_s,1,1+1);
+{STATISTIKY}
 
-      stats[i].id:=StrToInt(Copy                     (pom_s,1,8)); //vždy 8 znakov
-      Delete                                         (pom_s,1,8+1);
+while not dokoncenenacitanie do begin
+   if not FileExists('statistiky_lock.txt') then begin
+     F:=FileCreate('statistiky_lock.txt'); //zmakne databazu
+     Assignfile(subor,'statistiky.txt');
+     Reset(subor);
+     Readln(subor,pom_s);
+     stats_length:=strtoint(pom_s);
 
-      stats[i].kod:=StrToInt(Copy                    (pom_s,1,3)); //vždy len tri znaky
-      Delete                                         (pom_s,1,3+1);
-
- stats[i].mnozstvo:=StrToInt(Copy                    (pom_s,1,Pos(';',pom_s)-1));
-      Delete                                         (pom_s,1,Pos(';',pom_s));
-
-      stats[i].cena:=StrToInt(Copy                   (pom_s,1,Length(pom_s)));
-      end; //KONIEC načítania statistik
-CloseFile(subor);
-FileClose(F);
-DeleteFile('statistiky_lock.txt');
+     for i:=1 to stats_length do begin
+           ReadLn(subor,pom_s); //N;12345678;111;12;100;991231   -priklad
 
 
-Assignfile(subor,'tovar.txt'); //ZACIATOK nacitania tovar (meno)
-F:=FileCreate('tovar_lock.txt'); //zamkne tovar
-Reset(subor);
-Readln(subor,pom_s);
-dlzka:=strtoint(pom_s); //zisti velkost tovar.txt
-top_length:=dlzka;      //da tu hodnotu aj do arraju top
-for i:=1 to dlzka do begin
-      ReadLn(subor,pom_s); //nacita prvy riadok do pomocnych kod a meno
-      kod:=StrtoInt(Copy(pom_s,1,3));
-      Delete(pom_s,1,4);
-      meno:=Copy(pom_s,1,Length(pom_s));
-      for j:=1 to stats_length do begin    //prehlada pole stats a prida meno ku kodu
-               if (kod = stats[i].kod) then stats[i].meno:=meno;
-            end;
+           stats[i].typ:=Copy                             (pom_s,1,1); //vždy len jeden znak
+           Delete                                         (pom_s,1,1+1);
 
-      topp[i].meno:=meno;
-      topp[i].kod:=kod;
+           stats[i].id:=StrToInt(Copy                     (pom_s,1,8)); //vždy 8 znakov
+           Delete                                         (pom_s,1,8+1);
 
-      end; //KONIEC načítania statistik
-CloseFile(subor);
-FileClose(F);
-DeleteFile('tovar_lock.txt');
+           stats[i].kod:=StrToInt(Copy                    (pom_s,1,3)); //vždy len tri znaky
+           Delete                                         (pom_s,1,3+1);
 
+           stats[i].mnozstvo:=StrToInt(Copy               (pom_s,1,Pos(';',pom_s)-1));
+           Delete                                         (pom_s,1,Pos(';',pom_s));
+
+           stats[i].cena:=StrToInt(Copy                   (pom_s,1,Pos(';',pom_s)-1));
+           Delete                                         (pom_s,1,Pos(';',pom_s));
+
+           stats[i].datum:=StrToInt(Copy                  (pom_s,1,Length(pom_s)));
+           end;
+     CloseFile(subor);
+     FileClose(F);
+     DeleteFile('statistiky_lock.txt');
+     dokoncenenacitanie:=true;
+   end;
+end; //KONIEC načítania statistik
+
+
+dokoncenenacitanie:=false;
+{TOVAR}
+
+while not dokoncenenacitanie do begin
+   if not FileExists('tovar_lock.txt') then begin
+     Assignfile(subor,'tovar.txt'); //ZACIATOK nacitania tovar (meno)
+     F:=FileCreate('tovar_lock.txt'); //zamkne tovar
+     Reset(subor);
+     Readln(subor,pom_s);
+     dlzka:=strtoint(pom_s); //zisti velkost tovar.txt
+     top_length:=dlzka;      //da tu hodnotu aj do arraju top
+     for i:=1 to dlzka do begin
+           ReadLn(subor,pom_s); //nacita prvy riadok do pomocnych kod a meno
+           kod:=StrtoInt(Copy(pom_s,1,3));
+           Delete(pom_s,1,4);
+           meno:=Copy(pom_s,1,Length(pom_s));
+           for j:=1 to stats_length do begin    //prehlada pole stats a prida meno ku kodu
+                    if (kod = stats[i].kod) then stats[i].meno:=meno;
+                 end;
+
+           topp[i].meno:=meno;
+           topp[i].kod:=kod;
+
+           end; //KONIEC načítania statistik
+     CloseFile(subor);
+     FileClose(F);
+     DeleteFile('tovar_lock.txt');
+     dokoncenenacitanie:=true;
+   end;
+end;
 sort;
+
+
+dokoncenenacitanie:=false;
+  {KATEGORIE}
+
+while not dokoncenenacitanie do begin
+   if not FileExists('kategorie_lock.txt') then begin
+     AssignFile(subor,'kategorie.txt'); //Nacitanie KATEGORIE
+     F:=FileCreate('kategorie_lock.txt');
+     Reset(subor);
+
+     ReadLn(subor,pom_s);
+     filter1.caption:=Copy(pom_s,3,Length(pom_s)-2); //Filter 1
+     ReadLn(subor,pom_s);
+     filter2.caption:=Copy(pom_s,3,Length(pom_s)-2); //Filter 2
+     ReadLn(subor,pom_s);
+     filter3.caption:=Copy(pom_s,3,Length(pom_s)-2); //Filter 3
+     ReadLn(subor,pom_s);
+     filter4.caption:=Copy(pom_s,3,Length(pom_s)-2); //Filter 4
+
+     CloseFile(subor);
+     FileClose(F);
+     DeleteFile('kategorie_lock.txt');
+     dokoncenenacitanie:=true;
+   end;
+end;
 end;
 
 

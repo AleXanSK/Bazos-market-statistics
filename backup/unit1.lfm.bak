@@ -55,10 +55,10 @@ object Form1: TForm1
   end
   object trzby: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 270
+    Left = 271
     Height = 15
     Top = 8
-    Width = 55
+    Width = 54
     Anchors = [akTop, akRight]
     Caption = 'Tržby: xxxx'
     ParentColor = False
@@ -160,10 +160,9 @@ object Form1: TForm1
   end
   object Zobrazujem: TLabel
     Left = 16
-    Height = 15
+    Height = 1
     Top = 440
-    Width = 149
-    Caption = 'Zobrazujem: xxxxxxxxxxxxxxxx'
+    Width = 1
     ParentColor = False
   end
   object Memo1: TMemo
