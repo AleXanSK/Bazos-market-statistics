@@ -40,7 +40,7 @@ type
     Reload: TButton;
     filter4: TCheckBox;
     Priemercena: TLabel;
-    Label2: TLabel;
+    priemerkvantita: TLabel;
     filter3: TCheckBox;
     filter1: TCheckBox;
     Kontrola_suborov: TTimer;
@@ -297,6 +297,8 @@ end;
 procedure TForm1.top; {Pridava celkove naklady a celkove prijmy do top[i]}
 var i,j:integer;
     naklady_p,trzby_p,zisk_p,priemerna_cena,priemerna_kvantita:integer;
+    suma_nakupov,pocet_nakupov,id_nakupu,pocet_v_nakupe:integer;
+    priemer_predaj, priemer_kvantita:real;
 begin
   for i:=1 to stats_length do begin
      for j:=1 to top_length do begin
@@ -328,6 +330,41 @@ begin
      trzby.caption:=         'Tržby: '+InttoStr(trzby_p);
      naklady.caption:=       'Náklady: '+IntToStr(naklady_p);
      zisk.caption:=          'Zisk: '+IntToStr(trzby_p-naklady_p);
+
+
+
+  //Priemer
+  suma_nakupov:=0;
+  pocet_nakupov:=0;
+  priemer_predaj:=0;
+  priemer_kvantita:=0;
+  pocet_v_nakupe:=0;
+  for i:=1 to stats_length do begin //Priemer celkovy
+     if stats[i].typ = 'P' then begin
+       suma_nakupov:=suma_nakupov+stats[i].cena*stats[i].mnozstvo;
+       inc(pocet_nakupov);
+     end;
+  end;
+  priemer_predaj:=suma_nakupov div pocet_nakupov;
+  priemercena.caption:='Priemerna cena nakupu: '+FloattoStr(priemer_predaj);
+
+   i:=1;
+   while i < stats_length do begin //priemer nakupov    NIEKDE JE TU PROBEL
+      if stats[i].typ = 'P' then begin
+         id_nakupu:=stats[i].id;
+         inc(pocet_nakupov);
+         while id_nakupu <> stats[i].id do begin
+            pocet_v_nakupe:=pocet_v_nakupe+stats[i].mnozstvo;
+            inc(i);
+         end;
+      end;
+      inc(i);
+   end;
+
+   priemer_kvantita:=pocet_v_nakupe div pocet_nakupov;
+   priemerkvantita.caption:='Priemerna kvantita nakupu: '+FloatToStr(priemer_kvantita);
+
+
 end;
 
 end.

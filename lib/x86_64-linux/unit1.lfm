@@ -1,0 +1,225 @@
+object Form1: TForm1
+  Left = 929
+  Height = 536
+  Top = 232
+  Width = 724
+  Caption = 'Form1'
+  ClientHeight = 509
+  ClientWidth = 724
+  Menu = MainMenu1
+  OnCreate = FormCreate
+  LCLVersion = '1.8.4.0'
+  object Oddatum: TDateTimePicker
+    Left = 528
+    Height = 25
+    Top = 24
+    Width = 95
+    CenturyFrom = 1941
+    MaxDate = 2958465
+    MinDate = -53780
+    TabOrder = 0
+    TrailingSeparator = False
+    TextForNullDate = 'NULL'
+    LeadingZeros = True
+    Kind = dtkDate
+    TimeFormat = tf24
+    TimeDisplay = tdHMS
+    DateMode = dmComboBox
+    Date = 43486
+    Time = 0.578475069443812
+    UseDefaultSeparators = True
+    HideDateTimeParts = []
+    MonthNames = 'Long'
+  end
+  object PoDatum: TDateTimePicker
+    Left = 624
+    Height = 25
+    Top = 24
+    Width = 95
+    CenturyFrom = 1941
+    MaxDate = 2958465
+    MinDate = -53780
+    TabOrder = 1
+    TrailingSeparator = False
+    TextForNullDate = 'NULL'
+    LeadingZeros = True
+    Kind = dtkDate
+    TimeFormat = tf24
+    TimeDisplay = tdHMS
+    DateMode = dmComboBox
+    Date = 43486
+    Time = 0.578554756946687
+    UseDefaultSeparators = True
+    HideDateTimeParts = []
+    MonthNames = 'Long'
+  end
+  object trzby: TLabel
+    AnchorSideRight.Side = asrBottom
+    Left = 257
+    Height = 19
+    Top = 8
+    Width = 68
+    Anchors = [akTop, akRight]
+    Caption = 'Tržby: xxxx'
+    ParentColor = False
+  end
+  object naklady: TLabel
+    AnchorSideRight.Side = asrBottom
+    Left = 241
+    Height = 19
+    Top = 32
+    Width = 84
+    Anchors = [akTop, akRight]
+    Caption = 'Náklady: xxxx'
+    ParentColor = False
+  end
+  object Filter: TButton
+    Left = 568
+    Height = 28
+    Top = 136
+    Width = 72
+    Caption = 'Filtrovať'
+    TabOrder = 2
+  end
+  object Label3: TLabel
+    Left = 528
+    Height = 19
+    Top = 8
+    Width = 18
+    Caption = 'Od'
+    ParentColor = False
+  end
+  object Label4: TLabel
+    Left = 624
+    Height = 19
+    Top = 8
+    Width = 18
+    Caption = 'Do'
+    ParentColor = False
+  end
+  object filter1: TCheckBox
+    Left = 528
+    Height = 23
+    Top = 72
+    Width = 64
+    Caption = 'filter1'
+    TabOrder = 3
+  end
+  object filter2: TCheckBox
+    Left = 624
+    Height = 23
+    Top = 72
+    Width = 64
+    Caption = 'filter2'
+    TabOrder = 4
+  end
+  object filter3: TCheckBox
+    Left = 528
+    Height = 23
+    Top = 107
+    Width = 64
+    Caption = 'filter3'
+    TabOrder = 5
+  end
+  object filter4: TCheckBox
+    Left = 624
+    Height = 23
+    Top = 107
+    Width = 47
+    Caption = 'Iné'
+    TabOrder = 6
+  end
+  object Priemercena: TLabel
+    AnchorSideRight.Side = asrBottom
+    Left = 143
+    Height = 19
+    Top = 56
+    Width = 182
+    Anchors = [akTop, akRight]
+    Caption = 'Priemerna cena nakupu: xxxx'
+    ParentColor = False
+  end
+  object priemerkvantita: TLabel
+    AnchorSideRight.Side = asrBottom
+    Left = 123
+    Height = 19
+    Top = 80
+    Width = 202
+    Anchors = [akTop, akRight]
+    Caption = 'Priemerna kvantita nakupu: xxxx'
+    ParentColor = False
+  end
+  object Reload: TButton
+    Left = 623
+    Height = 25
+    Top = 472
+    Width = 80
+    Caption = 'Reload'
+    OnClick = ReloadClick
+    TabOrder = 7
+  end
+  object Zobrazujem: TLabel
+    Left = 16
+    Height = 1
+    Top = 440
+    Width = 1
+    ParentColor = False
+  end
+  object Memo1: TMemo
+    Left = 16
+    Height = 300
+    Top = 136
+    Width = 493
+    Lines.Strings = (
+      'Memo1'
+    )
+    TabOrder = 8
+  end
+  object zisk: TLabel
+    AnchorSideRight.Side = asrBottom
+    Left = 266
+    Height = 19
+    Top = 104
+    Width = 59
+    Anchors = [akTop, akRight]
+    Caption = 'Zisk: xxxx'
+    ParentColor = False
+  end
+  object MainMenu1: TMainMenu
+    left = 24
+    top = 464
+    object MenuItem1: TMenuItem
+      Caption = 'Tovar'
+      object MenuItem4: TMenuItem
+        Caption = 'Zobraz:'
+      end
+      object Top10: TMenuItem
+        Caption = '10 najviac predávaných'
+        OnClick = Top10Click
+      end
+      object poT10: TMenuItem
+        Caption = '10 najmenej predávaných'
+        OnClick = poT10Click
+      end
+      object MenuItem2: TMenuItem
+      end
+      object Podlakodu: TMenuItem
+        Caption = 'Tovar podla kódu'
+        OnClick = PodlakoduClick
+      end
+      object Podlamena: TMenuItem
+        Caption = 'Tovar podľa názvu'
+        OnClick = PodlamenaClick
+      end
+    end
+  end
+  object Kontrola_suborov: TTimer
+    Interval = 10005
+    left = 104
+    top = 464
+  end
+  object Vytvaranie_TOP: TTimer
+    left = 200
+    top = 464
+  end
+end
