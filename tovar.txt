@@ -1,4 +1,11 @@
-3
-111;pes
-100;kolac
-210;mydlo
+10
+111;Pivo
+100;Radler
+110;Pifko
+210;Vino
+350;Pes
+351;Kolacovy pes
+352;Palacovy pes
+353;Biedny pes
+354;Dobry pes
+410;Ine veci

@@ -57,6 +57,7 @@ type
     poT10: TMenuItem;
     MenuItem4: TMenuItem;
     procedure FormCreate(Sender: TObject);
+    procedure Kontrola_suborovTimer(Sender: TObject);
     procedure PodlakoduClick(Sender: TObject);
     procedure PodlamenaClick(Sender: TObject);
     procedure poT10Click(Sender: TObject);
@@ -65,6 +66,7 @@ type
     procedure nacitanie;
     procedure sort;
     procedure top;
+    procedure Vytvaranie_TOPTimer(Sender: TObject);
   private
 
   public
@@ -108,10 +110,42 @@ memo1.clear;
 NACITANIE;
 end;
 
-procedure TForm1.PodlakoduClick(Sender: TObject);
+procedure TForm1.Kontrola_suborovTimer(Sender: TObject);
+var stati,tovarik:integer;
+    subor:textfile;
+    pom_s:string;
 begin
-memo1.clear;
-//zobrazujem.caption:='Zobrazujem: '+IntToStr(Kod);
+  AssignFile(subor,'tovar_verzia.txt');
+  Reset(subor);
+  ReadLn(subor,pom_s);
+  tovarik:=StrToInt(pom_s);
+  Closefile(subor);
+
+  AssignFile(subor,'statistiky_verzia.txt');
+  Reset(subor);
+  ReadLn(subor,pom_s);
+  stati:=StrToInt(pom_s);
+  Closefile(subor);
+
+  if ((stati > ver_stati) OR (tovarik > ver_tovar)) then nacitanie;
+end;
+
+procedure TForm1.PodlakoduClick(Sender: TObject);
+var userstring:string;
+    i:integer;
+begin
+ //niekde tu PROBLEM
+memo1.clear; zobrazujem.caption:='';
+ if not InputQuery('Kód', 'Aký má kód?', UserString) then begin zobrazujem.caption:=''; exit; end;
+for i:=top_length downto 1 do begin
+      if (StrToInt(userstring) <> topp[i].kod) then begin
+        memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
+      end;
+      end;
+
+
+
+zobrazujem.caption:='Zobrazujem: '+IntToStr(topp[i].Kod);
 end;
 
 procedure TForm1.PodlamenaClick(Sender: TObject);
@@ -119,8 +153,8 @@ var userstring:string;
     i:integer;
 
 begin
-memo1.clear;
- if not InputQuery('Meno', 'Ako sa volá?', UserString) then exit;
+memo1.clear;  zobrazujem.caption:='';
+ if not InputQuery('Meno', 'Ako sa volá?', UserString) then begin zobrazujem.caption:=''; exit; end;
 for i:=top_length downto 1 do begin
       if userstring = topp[i].meno then begin
         memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
@@ -128,14 +162,18 @@ for i:=top_length downto 1 do begin
 zobrazujem.caption:='Zobrazujem: '+userString;
 end;
 
+end;
+
 procedure TForm1.Top10Click(Sender: TObject);
 var
     i:integer;
 begin
 memo1.clear;
-for i:=1 to 10 do begin
-  memo1.append(inttostr(i)+'.  '+topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
-end;
+
+  for i:=1 to 10 do begin
+    memo1.append(inttostr(i)+'.  '+topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
+    end;
+
 zobrazujem.caption:='Zobrazujem: Top 10 najpredavánejších produktov';
 
 end;
@@ -152,7 +190,7 @@ end;
 
 procedure TForm1.ReloadClick(Sender: TObject);
 begin
-memo1.clear;
+memo1.clear; zobrazujem.caption:='';
   nacitanie;
 end;
 
@@ -264,7 +302,6 @@ while not dokoncenenacitanie do begin
 end;
 end;
 
-
 procedure TForm1.sort;
 var i,j,temp_kod,temp_prijmy,temp_naklad,temp_zisk:integer;
     temp_meno:string;
@@ -302,7 +339,6 @@ top;
 
 
 end;
-
 
 procedure TForm1.top; {Pridava celkove naklady a celkove prijmy do top[i]}
 var i,j:integer;
@@ -375,6 +411,18 @@ begin
    priemerkvantita.caption:='Priemerna kvantita nakupu: '+FloatToStr(priemer_kvantita);
 
 
+end;
+
+procedure TForm1.Vytvaranie_TOPTimer(Sender: TObject);
+var subor:textfile;
+    i:integer;
+begin
+AssignFile(subor,'top.txt');
+Rewrite(subor);
+For i:=1 to 10 do begin
+WriteLn(subor,IntToStr(topp[i].kod));
+end;
+CloseFile(subor);
 end;
 
 end.
