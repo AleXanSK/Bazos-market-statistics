@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 776
+  Left = 85
   Height = 536
-  Top = 150
+  Top = 265
   Width = 724
   Caption = 'Form1'
   ClientHeight = 516
@@ -55,10 +55,10 @@ object Form1: TForm1
   end
   object trzby: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 271
+    Left = 270
     Height = 15
     Top = 8
-    Width = 54
+    Width = 55
     Anchors = [akTop, akRight]
     Caption = 'Tržby: xxxx'
     ParentColor = False
@@ -139,7 +139,7 @@ object Form1: TForm1
     Caption = 'Priemerna cena nakupu: xxxx'
     ParentColor = False
   end
-  object Label2: TLabel
+  object priemerkvantita: TLabel
     AnchorSideRight.Side = asrBottom
     Left = 157
     Height = 15

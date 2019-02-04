@@ -111,11 +111,23 @@ end;
 procedure TForm1.PodlakoduClick(Sender: TObject);
 begin
 memo1.clear;
+//zobrazujem.caption:='Zobrazujem: '+IntToStr(Kod);
 end;
 
 procedure TForm1.PodlamenaClick(Sender: TObject);
+var userstring:string;
+    i:integer;
+
 begin
 memo1.clear;
+ if not InputQuery('Meno', 'Ako sa volá?', UserString) then exit;
+for i:=top_length downto 1 do begin
+      if userstring = topp[i].meno then begin
+        memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
+      end;
+zobrazujem.caption:='Zobrazujem: '+userString;
+end;
+
 end;
 
 procedure TForm1.Top10Click(Sender: TObject);
