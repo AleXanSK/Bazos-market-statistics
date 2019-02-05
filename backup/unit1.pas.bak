@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, DateTimePicker,  Forms, Controls,
-  Graphics, Dialogs, Menus, StdCtrls, ExtCtrls, LazFileUtils;
+  Graphics, Dialogs, Menus, StdCtrls, ExtCtrls, LazFileUtils, DateUtils;
 
 type
 
@@ -29,6 +29,7 @@ type
   end;
 
   TForm1 = class(TForm)
+    Button1: TButton;
     Filter: TButton;
     zisk: TLabel;
     Memo1: TMemo;
@@ -56,6 +57,7 @@ type
     Top10: TMenuItem;
     poT10: TMenuItem;
     MenuItem4: TMenuItem;
+    procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Kontrola_suborovTimer(Sender: TObject);
     procedure PodlakoduClick(Sender: TObject);
@@ -67,6 +69,7 @@ type
     procedure sort;
     procedure top;
     procedure Vytvaranie_TOPTimer(Sender: TObject);
+    procedure filtrovanie;
   private
 
   public
@@ -83,6 +86,10 @@ var
 
   topp:array[1..100] of nazvy_top;     //Zoradene produkty od naj po najmenej
   top_length:integer;                 //Počet produktov
+
+  topp_filter:array[1..100] of nazvy_top;   //filtrovane pole topp
+  top_filter_length:integer;
+
 
 implementation
 
@@ -108,6 +115,17 @@ memo1.clear;
  end;
 
 NACITANIE;
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+var pom_s:string;
+    i:integer;
+begin
+  pom_s:=DateTimeToStr(Oddatum.date);
+  pom_s:=pom_s+'     '+DateTimeToStr(Podatum.date);
+  memo1.append(pom_s);
+
+  for i:=1 to stats_length do memo1.append(stats[i].typ+'  '+StrToInt(stats[i].kod)+'  '+StrToInt(stats[i].cena)+'  '+StrToInt(stats[i].mnozstvo));
 end;
 
 procedure TForm1.Kontrola_suborovTimer(Sender: TObject);
@@ -138,14 +156,14 @@ begin
 memo1.clear; zobrazujem.caption:='';
  if not InputQuery('Kód', 'Aký má kód?', UserString) then begin zobrazujem.caption:=''; exit; end;
 for i:=top_length downto 1 do begin
-      if (StrToInt(userstring) <> topp[i].kod) then begin
+      if (StrToInt(userstring) = topp[i].kod) then begin
         memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
       end;
       end;
 
 
 
-zobrazujem.caption:='Zobrazujem: '+IntToStr(topp[i].Kod);
+zobrazujem.caption:='Zobrazujem: '+userstring;
 end;
 
 procedure TForm1.PodlamenaClick(Sender: TObject);
@@ -182,7 +200,7 @@ procedure TForm1.poT10Click(Sender: TObject);
 var i:integer;
 begin
 memo1.clear;
-for i:=top_length downto top_length-10 do begin
+for i:=top_length downto top_length-9 do begin
   memo1.append(inttostr(i)+'.  '+topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
 end;
 zobrazujem.caption:='Zobrazujem: Top 10 najmenej predávaných produktov';
@@ -262,6 +280,7 @@ while not dokoncenenacitanie do begin
            for j:=1 to stats_length do begin    //prehlada pole stats a prida meno ku kodu
                     if (kod = stats[i].kod) then stats[i].meno:=meno;
                  end;
+
 
            topp[i].meno:=meno;
            topp[i].kod:=kod;
@@ -423,6 +442,37 @@ For i:=1 to 10 do begin
 WriteLn(subor,IntToStr(topp[i].kod));
 end;
 CloseFile(subor);
+end;
+
+procedure TForm1.filtrovanie;
+var
+OddatumP,PoDatumP,pom_s:string;
+filterP:integer;
+filterB:boolean;
+i,j:integer;
+begin
+{pom_s:=DateTimeToStr(Oddatum.date); //31.12.1099
+OddatumP:=Copy(pom_s,9,2)+Copy(pom_s,4,2)+Copy(pom_s,1,2);
+
+pom_s:=DateTimeToStr(Podatum.date);
+PodatumP:=Copy(pom_s,9,2)+Copy(pom_s,4,2)+Copy(pom_s,1,2);
+j:=1;
+for i:=1 to top_length do begin
+if topp[i].kod >= 400 then filterP:=4 else if topp[i].kod >= 300 then filterP:=3 else if topp[i].kod >= 200 then filterP:=2 else FilterP:=1;
+case filterP of
+     4:filterB:=filter4.Checked;
+     3:filterB:=filter3.Checked;
+     2:filterB:=filter2.Checked;
+     1:filterB:=filter1.Checked;
+     end;
+
+
+if ((StrToInt(OddatumP) < StrToInt(stats[i].datum) < StrToInt(PoDatumP)) AND filterB) then begin
+    topp_filter[j].kod:=topp[i].kod;
+    inc(j);
+end;
+end;
+top_filter_length:=j;}
 end;
 
 end.

@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 1148
+  Left = 55
   Height = 536
-  Top = 306
+  Top = 342
   Width = 724
   Caption = 'Form1'
   ClientHeight = 516
@@ -55,10 +55,10 @@ object Form1: TForm1
   end
   object trzby: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 271
+    Left = 270
     Height = 15
     Top = 8
-    Width = 54
+    Width = 55
     Anchors = [akTop, akRight]
     Caption = 'Tržby: xxxx'
     ParentColor = False
@@ -184,6 +184,17 @@ object Form1: TForm1
     Anchors = [akTop, akRight]
     Caption = 'Zisk: xxxx'
     ParentColor = False
+  end
+  object Button1: TButton
+    Left = 550
+    Height = 133
+    Top = 238
+    Width = 142
+    Caption = 'TESUJEM'
+    Font.Height = -27
+    OnClick = Button1Click
+    ParentFont = False
+    TabOrder = 9
   end
   object MainMenu1: TMainMenu
     left = 24
