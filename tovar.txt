@@ -1,4 +1,4 @@
-10
+11
 111;Pivo
 100;Radler
 110;Pifko
@@ -9,3 +9,4 @@
 353;Biedny pes
 354;Dobry pes
 410;Ine veci
+411;Palacinka

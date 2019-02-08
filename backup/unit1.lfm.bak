@@ -1,14 +1,14 @@
 object Form1: TForm1
-  Left = 55
+  Left = 109
   Height = 536
-  Top = 342
-  Width = 724
+  Top = 140
+  Width = 1273
   Caption = 'Form1'
   ClientHeight = 516
-  ClientWidth = 724
+  ClientWidth = 1273
   Menu = MainMenu1
   OnCreate = FormCreate
-  LCLVersion = '1.4.0.4'
+  LCLVersion = '1.6.4.0'
   object Oddatum: TDateTimePicker
     Left = 528
     Height = 23
@@ -55,7 +55,7 @@ object Form1: TForm1
   end
   object trzby: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 270
+    Left = 289
     Height = 15
     Top = 8
     Width = 55
@@ -65,7 +65,7 @@ object Form1: TForm1
   end
   object naklady: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 256
+    Left = 275
     Height = 15
     Top = 32
     Width = 69
@@ -131,7 +131,7 @@ object Form1: TForm1
   end
   object Priemercena: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 174
+    Left = 193
     Height = 15
     Top = 56
     Width = 151
@@ -141,7 +141,7 @@ object Form1: TForm1
   end
   object priemerkvantita: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 157
+    Left = 176
     Height = 15
     Top = 80
     Width = 168
@@ -177,7 +177,7 @@ object Form1: TForm1
   end
   object zisk: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 278
+    Left = 297
     Height = 15
     Top = 104
     Width = 47
@@ -195,6 +195,12 @@ object Form1: TForm1
     OnClick = Button1Click
     ParentFont = False
     TabOrder = 9
+  end
+  object Image1: TImage
+    Left = 736
+    Height = 500
+    Top = 8
+    Width = 500
   end
   object MainMenu1: TMainMenu
     left = 24

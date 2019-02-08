@@ -5,8 +5,9 @@ unit Unit1;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, DateTimePicker,  Forms, Controls,
-  Graphics, Dialogs, Menus, StdCtrls, ExtCtrls, LazFileUtils, DateUtils;
+  Classes, SysUtils, FileUtil, DateTimePicker, Forms, Controls, Graphics,
+  Dialogs, Menus, StdCtrls, ExtCtrls, LazFileUtils, TAGraph, TASources,
+  DateUtils;
 
 type
 
@@ -31,6 +32,7 @@ type
   TForm1 = class(TForm)
     Button1: TButton;
     Filter: TButton;
+    Image1: TImage;
     zisk: TLabel;
     Memo1: TMemo;
     MenuItem2: TMenuItem;
@@ -115,6 +117,10 @@ memo1.clear;
  end;
 
 NACITANIE;
+
+//Default view
+for i:=1 to top_length do
+        memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
@@ -435,12 +441,24 @@ end;
 procedure TForm1.Vytvaranie_TOPTimer(Sender: TObject);
 var subor:textfile;
     i:integer;
+    verzia:integer;
+    pom_s:string;
 begin
 AssignFile(subor,'top.txt');
 Rewrite(subor);
 For i:=1 to 10 do begin
 WriteLn(subor,IntToStr(topp[i].kod));
 end;
+CloseFile(subor);
+
+AssignFile(subor,'top_verzia.txt');
+Reset(subor);
+ReadLn(subor,pom_s);
+verzia:=StrToInt(pom_s);
+Inc(verzia);
+CloseFile(subor);
+Rewrite(subor);
+WriteLn(subor,IntToStr(verzia));
 CloseFile(subor);
 end;
 
