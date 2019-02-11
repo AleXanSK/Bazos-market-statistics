@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, DateTimePicker, Forms, Controls, Graphics,
-  Dialogs, Menus, StdCtrls, ExtCtrls, LazFileUtils, TAGraph, TASources,
+  Dialogs, Menus, StdCtrls, ExtCtrls, LazFileUtils,
   DateUtils;
 
 type
@@ -28,6 +28,10 @@ type
     naklad:integer;
     zisk:integer;
   end;
+  nazvy_tovar = record
+    meno:string;
+    kod:integer;
+  end;
 
   TForm1 = class(TForm)
     Button1: TButton;
@@ -38,7 +42,6 @@ type
     MenuItem2: TMenuItem;
     Podlamena: TMenuItem;
     Podlakodu: TMenuItem;
-    Vytvaranie_TOP: TTimer;
     Zobrazujem: TLabel;
     Reload: TButton;
     filter4: TCheckBox;
@@ -60,6 +63,7 @@ type
     poT10: TMenuItem;
     MenuItem4: TMenuItem;
     procedure Button1Click(Sender: TObject);
+    procedure FilterClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Kontrola_suborovTimer(Sender: TObject);
     procedure PodlakoduClick(Sender: TObject);
@@ -70,7 +74,7 @@ type
     procedure nacitanie;
     procedure sort;
     procedure top;
-    procedure Vytvaranie_TOPTimer(Sender: TObject);
+    procedure Vytvaranie_TOP;
     procedure filtrovanie;
   private
 
@@ -89,8 +93,11 @@ var
   topp:array[1..100] of nazvy_top;     //Zoradene produkty od naj po najmenej
   top_length:integer;                 //Počet produktov
 
-  topp_filter:array[1..100] of nazvy_top;   //filtrovane pole topp
-  top_filter_length:integer;
+  stats_filter:array[1..100] of nazvy_stat;   //filtrovane pole stats
+  stats_filter_length:integer;
+
+  ptovar:array[1..100] of nazvy_tovar;
+  ptovar_length:integer;
 
 
 implementation
@@ -101,6 +108,8 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 var i:integer;
+    subor:textfile;
+    pom_s:string;
 begin
 memo1.clear;
 //Vyčistenie polí
@@ -117,6 +126,19 @@ memo1.clear;
  end;
 
 NACITANIE;
+//Ziskanie verzii
+AssignFile(subor,'statistiky_verzia.txt');
+Reset(subor);
+ReadLn(subor,pom_s);
+ver_stati:=StrToInt(pom_s);
+CloseFile(subor);
+
+AssignFile(subor,'tovar_verzia.txt');
+Reset(subor);
+ReadLn(subor,pom_s);
+ver_tovar:=StrToInt(pom_s);
+CloseFile(subor);
+
 
 //Default view
 for i:=1 to top_length do
@@ -132,6 +154,11 @@ begin
   memo1.append(pom_s);
 
   for i:=1 to stats_length do memo1.append(stats[i].typ+'  '+IntToStr(stats[i].kod)+'  '+IntToStr(stats[i].cena)+'  '+IntToStr(stats[i].mnozstvo));
+end;
+
+procedure TForm1.FilterClick(Sender: TObject);
+begin
+  top;
 end;
 
 procedure TForm1.Kontrola_suborovTimer(Sender: TObject);
@@ -151,7 +178,8 @@ begin
   stati:=StrToInt(pom_s);
   Closefile(subor);
 
-  if ((stati > ver_stati) OR (tovarik > ver_tovar)) then nacitanie;
+  if ((stati > ver_stati) OR (tovarik > ver_tovar)) then
+     begin nacitanie; Vytvaranie_TOP; end;
 end;
 
 procedure TForm1.PodlakoduClick(Sender: TObject);
@@ -203,11 +231,13 @@ zobrazujem.caption:='Zobrazujem: Top 10 najpredavánejších produktov';
 end;
 
 procedure TForm1.poT10Click(Sender: TObject);
-var i:integer;
+var i,j:integer;
 begin
 memo1.clear;
+j:=1;
 for i:=top_length downto top_length-9 do begin
-  memo1.append(inttostr(i)+'.  '+topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
+  memo1.append(inttostr(j)+'.  '+topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
+  inc(j);
 end;
 zobrazujem.caption:='Zobrazujem: Top 10 najmenej predávaných produktov';
 end;
@@ -268,7 +298,7 @@ end; //KONIEC načítania statistik
 
 
 dokoncenenacitanie:=false;
-{TOVAR}
+{TOVAR to TOPP}
 
 while not dokoncenenacitanie do begin
    if not FileExists('tovar_lock.txt') then begin
@@ -325,6 +355,31 @@ while not dokoncenenacitanie do begin
      dokoncenenacitanie:=true;
    end;
 end;
+
+dokoncenenacitanie:=false;
+  {TOVAR}
+
+while not dokoncenenacitanie do begin
+   if not FileExists('tovar_lock.txt') then begin
+     AssignFile(subor,'tovar.txt'); //Nacitanie KATEGORIE
+     F:=FileCreate('tovar_lock.txt');
+     Reset(subor);
+     Readln(subor,pom_s);
+     dlzka:=StrTOInt(pom_s);
+     for i:=1 to dlzka do begin
+        ReadLn(subor,pom_s);
+        ptovar[i].kod:=StrToInt(Copy   (pom_s,1,3));
+        Delete                         (pom_s,1,4);
+        ptovar[i].meno:=Copy           (pom_s,1,Length(pom_s));
+     end;
+     ptovar_length:=dlzka;
+
+     CloseFile(subor);
+     FileClose(F);
+     DeleteFile('tovar_lock.txt');
+     dokoncenenacitanie:=true;
+   end;
+end;
 end;
 
 procedure TForm1.sort;
@@ -337,7 +392,7 @@ top;
 
   For i := top_length-1 DownTo 1 do
   		For j := 2 to i do
-  			If (topp[j-1].zisk > topp[j].zisk) Then
+  			If (topp[j-1].zisk < topp[j].zisk) Then
   			Begin
                                 temp_kod   := topp[j-1].kod;
                                 temp_prijmy:= topp[j-1].prijmy;
@@ -371,20 +426,22 @@ var i,j:integer;
     suma_nakupov,pocet_nakupov,id_nakupu,pocet_v_nakupe:integer;
     priemer_predaj, priemer_kvantita:real;
 begin
-  for i:=1 to stats_length do begin
+FILTROVANIE;
+
+  for i:=1 to stats_filter_length do begin
      for j:=1 to top_length do begin
         if stats[i].typ = 'N' then
         begin
-          if (stats[i].kod = topp[j].kod) then begin
-             topp[j].naklad:=stats[i].mnozstvo*stats[i].cena;
+          if (stats_filter[i].kod = topp[j].kod) then begin
+             topp[j].naklad:=stats_filter[i].mnozstvo*stats_filter[i].cena;
           end;
 
         end;
 
-        if stats[i].typ = 'P' then
+        if stats_filter[i].typ = 'P' then
            begin
-          if (stats[i].kod = topp[j].kod) then begin
-             topp[j].prijmy:=stats[i].mnozstvo*stats[i].cena;
+          if (stats_filter[i].kod = topp[j].kod) then begin
+             topp[j].prijmy:=stats_filter[i].mnozstvo*stats_filter[i].cena;
            end;
         end;
      end;
@@ -435,16 +492,16 @@ begin
    priemer_kvantita:=pocet_v_nakupe div pocet_nakupov;
    priemerkvantita.caption:='Priemerna kvantita nakupu: '+FloatToStr(priemer_kvantita);
 
-
+sort;
 end;
 
-procedure TForm1.Vytvaranie_TOPTimer(Sender: TObject);
+procedure TForm1.Vytvaranie_TOP;
 var subor:textfile;
     i:integer;
     verzia:integer;
     pom_s:string;
 begin
-AssignFile(subor,'top.txt');
+ AssignFile(subor,'top.txt');
 Rewrite(subor);
 For i:=1 to 10 do begin
 WriteLn(subor,IntToStr(topp[i].kod));
@@ -464,19 +521,32 @@ end;
 
 procedure TForm1.filtrovanie;
 var
-OddatumP,PoDatumP,pom_s:string;
+OddatumP,PoDatumP,pom_s,rok,mesiac,den:string;
 filterP:integer;
 filterB:boolean;
 i,j:integer;
 begin
-{pom_s:=DateTimeToStr(Oddatum.date); //31.12.1099
-OddatumP:=Copy(pom_s,9,2)+Copy(pom_s,4,2)+Copy(pom_s,1,2);
+pom_s:=DateTimeToStr(Oddatum.date); //31.12.1099
+den:=copy(pom_s,1,(pos('.',pom_s)-1));
+Delete(pom_s,1,pos('.',pom_s));
+mesiac:=copy(pom_s,2,pos('.',pom_s)-1-1);
+Delete(pom_s,1,pos('.',pom_s));
+rok:=Copy(pom_s,4,2);
+
+OddatumP:=rok+mesiac+den;
 
 pom_s:=DateTimeToStr(Podatum.date);
-PodatumP:=Copy(pom_s,9,2)+Copy(pom_s,4,2)+Copy(pom_s,1,2);
+den:=copy(pom_s,1,pos('.',pom_s)-1);
+Delete(pom_s,1,pos('.',pom_s));
+mesiac:=copy(pom_s,2,pos('.',pom_s)-1-1);
+Delete(pom_s,1,pos('.',pom_s));
+rok:=Copy(pom_s,4,2);
+
+PodatumP:=rok+mesiac+den;
+
 j:=1;
-for i:=1 to top_length do begin
-if topp[i].kod >= 400 then filterP:=4 else if topp[i].kod >= 300 then filterP:=3 else if topp[i].kod >= 200 then filterP:=2 else FilterP:=1;
+for i:=1 to stats_length do begin
+if stats[i].kod >= 400 then filterP:=4 else if stats[i].kod >= 300 then filterP:=3 else if stats[i].kod >= 200 then filterP:=2 else FilterP:=1;
 case filterP of
      4:filterB:=filter4.Checked;
      3:filterB:=filter3.Checked;
@@ -485,12 +555,17 @@ case filterP of
      end;
 
 
-if ((StrToInt(OddatumP) < StrToInt(stats[i].datum) < StrToInt(PoDatumP)) AND filterB) then begin
-    topp_filter[j].kod:=topp[i].kod;
-    inc(j);
+if ((StrToInt(OddatumP) < stats[i].datum) AND (stats[i].datum < StrToInt(PoDatumP)) AND filterB) then begin
+     stats[i].typ:=     stats_filter[i].typ;
+     stats[i].id:=      stats_filter[i].id;
+     stats[i].kod:=     stats_filter[i].kod;
+     stats[i].mnozstvo:=stats_filter[i].mnozstvo;
+     stats[i].cena:=    stats_filter[i].cena;
+     stats[i].meno:=    stats_filter[i].meno;
+     stats[i].datum:=   stats_filter[i].datum;
 end;
 end;
-top_filter_length:=j;}
+stats_filter_length:=j;
 end;
 
 end.

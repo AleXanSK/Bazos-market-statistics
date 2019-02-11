@@ -1,14 +1,14 @@
 object Form1: TForm1
-  Left = 109
+  Left = 340
   Height = 536
-  Top = 140
+  Top = 200
   Width = 1273
   Caption = 'Form1'
   ClientHeight = 516
   ClientWidth = 1273
   Menu = MainMenu1
   OnCreate = FormCreate
-  LCLVersion = '1.6.4.0'
+  LCLVersion = '1.4.0.4'
   object Oddatum: TDateTimePicker
     Left = 528
     Height = 23
@@ -25,7 +25,7 @@ object Form1: TForm1
     TimeFormat = tf24
     TimeDisplay = tdHMS
     DateMode = dmComboBox
-    Date = 43486
+    Date = 43121
     Time = 0.578475069443812
     UseDefaultSeparators = True
     HideDateTimeParts = []
@@ -79,6 +79,7 @@ object Form1: TForm1
     Top = 136
     Width = 72
     Caption = 'Filtrovať'
+    OnClick = FilterClick
     TabOrder = 2
   end
   object Label3: TLabel
@@ -103,6 +104,8 @@ object Form1: TForm1
     Top = 72
     Width = 50
     Caption = 'filter1'
+    Checked = True
+    State = cbChecked
     TabOrder = 3
   end
   object filter2: TCheckBox
@@ -111,6 +114,8 @@ object Form1: TForm1
     Top = 72
     Width = 50
     Caption = 'filter2'
+    Checked = True
+    State = cbChecked
     TabOrder = 4
   end
   object filter3: TCheckBox
@@ -119,6 +124,8 @@ object Form1: TForm1
     Top = 107
     Width = 50
     Caption = 'filter3'
+    Checked = True
+    State = cbChecked
     TabOrder = 5
   end
   object filter4: TCheckBox
@@ -127,6 +134,8 @@ object Form1: TForm1
     Top = 107
     Width = 36
     Caption = 'Iné'
+    Checked = True
+    State = cbChecked
     TabOrder = 6
   end
   object Priemercena: TLabel
@@ -234,11 +243,6 @@ object Form1: TForm1
     Interval = 10005
     OnTimer = Kontrola_suborovTimer
     left = 104
-    top = 464
-  end
-  object Vytvaranie_TOP: TTimer
-    OnTimer = Vytvaranie_TOPTimer
-    left = 200
     top = 464
   end
 end
