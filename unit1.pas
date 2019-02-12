@@ -99,6 +99,8 @@ var
   ptovar:array[1..100] of nazvy_tovar;
   ptovar_length:integer;
 
+//  debugCount: qword;     //Debug
+
 
 implementation
 
@@ -111,7 +113,9 @@ var i:integer;
     subor:textfile;
     pom_s:string;
 begin
+//incializacia
 memo1.clear;
+
 //Vyčistenie polí
 
  for i:=1 to 100 do begin
@@ -328,7 +332,7 @@ while not dokoncenenacitanie do begin
      dokoncenenacitanie:=true;
    end;
 end;
-sort;
+
 
 
 dokoncenenacitanie:=false;
@@ -380,6 +384,7 @@ while not dokoncenenacitanie do begin
      dokoncenenacitanie:=true;
    end;
 end;
+sort;
 end;
 
 procedure TForm1.sort;
@@ -424,7 +429,7 @@ procedure TForm1.top; {Pridava celkove naklady a celkove prijmy do top[i]}
 var i,j:integer;
     naklady_p,trzby_p,zisk_p,priemerna_cena,priemerna_kvantita:integer;
     suma_nakupov,pocet_nakupov,id_nakupu,pocet_v_nakupe:integer;
-    priemer_predaj, priemer_kvantita:real;
+    priemer_predaj, priemer_kvantita:currency;
 begin
 FILTROVANIE;
 
@@ -473,26 +478,28 @@ FILTROVANIE;
        inc(pocet_nakupov);
      end;
   end;
-  priemer_predaj:=suma_nakupov div pocet_nakupov;
+  priemer_predaj:=suma_nakupov / pocet_nakupov;
   priemercena.caption:='Priemerna cena nakupu: '+FloattoStr(priemer_predaj);
 
    i:=1;
-   while i < stats_length do begin //priemer nakupov    NIEKDE JE TU PROBEL
-      if stats[i].typ = 'P' then begin
-         id_nakupu:=stats[i].id;
-         inc(pocet_nakupov);
-         while id_nakupu <> stats[i].id do begin
-            pocet_v_nakupe:=pocet_v_nakupe+stats[i].mnozstvo;
-            inc(i);
-         end;
-      end;
-      inc(i);
-   end;
 
-   priemer_kvantita:=pocet_v_nakupe div pocet_nakupov;
-   priemerkvantita.caption:='Priemerna kvantita nakupu: '+FloatToStr(priemer_kvantita);
+    while i < stats_length do begin //priemer nakupov    NIEKDE JE TU PROBEL
+       if stats[i].typ = 'P' then begin
+          id_nakupu:=stats[i].id;
+          inc(pocet_nakupov);
+          while id_nakupu <> stats[i].id do begin
+             pocet_v_nakupe:=pocet_v_nakupe+stats[i].mnozstvo;
+             inc(i);
+          end;
+       end;
+       inc(i);
+    end;
 
-sort;
+    priemer_kvantita:=pocet_v_nakupe / pocet_nakupov;
+    priemerkvantita.caption:='Priemerna kvantita nakupu: '+FloatToStr(priemer_kvantita);
+
+
+
 end;
 
 procedure TForm1.Vytvaranie_TOP;
@@ -521,26 +528,42 @@ end;
 
 procedure TForm1.filtrovanie;
 var
-OddatumP,PoDatumP,pom_s,rok,mesiac,den:string;
+
+OddatumP,PoDatumP,pom_string,rok,mesiac,den:string;
 filterP:integer;
 filterB:boolean;
 i,j:integer;
+//debugVypis: TStringList;
+//aktCas: TDateTime;
 begin
-pom_s:=DateTimeToStr(Oddatum.date); //31.12.1099
-den:=copy(pom_s,1,(pos('.',pom_s)-1));
-Delete(pom_s,1,pos('.',pom_s));
-mesiac:=copy(pom_s,2,pos('.',pom_s)-1-1);
-Delete(pom_s,1,pos('.',pom_s));
-rok:=Copy(pom_s,4,2);
+{
+ inc(debugCount);
+
+ //Set my date variable using the EncodeDateTime function
+ aktCas := EncodeDateTime(2000, 02, 29, 12, 34, 56, 789);
+ //LongTimeFormat := 'hh:mm:ss.z';  // Ensure that MSecs are
+ debugVypis:= TStringList.Create;
+ debugVypis.LoadFromFile('DEBUG.txt');
+ debugVypis.Add(DateToStr(aktCas) +'  '+ intToStr(debugCount));
+ debugVypis.SaveToFile('DEBUG.txt');
+ debugVypis.Free;
+}
+
+pom_string:=DateTimeToStr(Oddatum.date); //31.12.1099
+den:=copy(pom_string,1,(pos('.',pom_string)-1));
+Delete(pom_string,1,pos('.',pom_string));
+mesiac:=copy(pom_string,2,pos('.',pom_string)-1-1);
+Delete(pom_string,1,pos('.',pom_string));
+rok:=Copy(pom_string,4,2);
 
 OddatumP:=rok+mesiac+den;
 
-pom_s:=DateTimeToStr(Podatum.date);
-den:=copy(pom_s,1,pos('.',pom_s)-1);
-Delete(pom_s,1,pos('.',pom_s));
-mesiac:=copy(pom_s,2,pos('.',pom_s)-1-1);
-Delete(pom_s,1,pos('.',pom_s));
-rok:=Copy(pom_s,4,2);
+pom_string:=DateTimeToStr(Podatum.date);
+den:=copy(pom_string,1,pos('.',pom_string)-1);
+Delete(pom_string,1,pos('.',pom_string));
+mesiac:=copy(pom_string,2,pos('.',pom_string)-1-1);
+Delete(pom_string,1,pos('.',pom_string));
+rok:=Copy(pom_string,4,2);
 
 PodatumP:=rok+mesiac+den;
 
@@ -555,17 +578,18 @@ case filterP of
      end;
 
 
-if ((StrToInt(OddatumP) < stats[i].datum) AND (stats[i].datum < StrToInt(PoDatumP)) AND filterB) then begin
-     stats[i].typ:=     stats_filter[i].typ;
-     stats[i].id:=      stats_filter[i].id;
-     stats[i].kod:=     stats_filter[i].kod;
-     stats[i].mnozstvo:=stats_filter[i].mnozstvo;
-     stats[i].cena:=    stats_filter[i].cena;
-     stats[i].meno:=    stats_filter[i].meno;
-     stats[i].datum:=   stats_filter[i].datum;
+if ((StrToInt(OddatumP) < stats[i].datum) AND (stats[i].datum < StrToInt(PoDatumP)) AND (filterB)) then begin
+     stats_filter[j].typ:=     stats[i].typ;
+     stats_filter[j].id:=      stats[i].id;
+     stats_filter[j].kod:=     stats[i].kod;
+     stats_filter[j].mnozstvo:=stats[i].mnozstvo;
+     stats_filter[j].cena:=    stats[i].cena;
+     stats_filter[j].meno:=    stats[i].meno;
+     stats_filter[j].datum:=   stats[i].datum;
+     inc(j);
 end;
 end;
-stats_filter_length:=j;
+stats_filter_length:=j-1;
 end;
 
 end.
