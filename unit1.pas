@@ -76,6 +76,7 @@ type
     procedure top;
     procedure Vytvaranie_TOP;
     procedure filtrovanie;
+    procedure spravmigraf;
   private
 
   public
@@ -156,7 +157,7 @@ begin
   pom_s:=DateTimeToStr(Oddatum.date);
   pom_s:=pom_s+'     '+DateTimeToStr(Podatum.date);
   memo1.append(pom_s);
-
+  spravmigraf;
   for i:=1 to stats_length do memo1.append(stats[i].typ+'  '+IntToStr(stats[i].kod)+'  '+IntToStr(stats[i].cena)+'  '+IntToStr(stats[i].mnozstvo));
 end;
 
@@ -432,10 +433,17 @@ var i,j:integer;
     priemer_predaj, priemer_kvantita:currency;
 begin
 FILTROVANIE;
+for i:=1 to top_length do begin   //vynulovanie topp
+   topp[i].prijmy:=0;
+   topp[i].naklad:=0;
+   topp[i].zisk:=0;
+   end;
+
+
 
   for i:=1 to stats_filter_length do begin
      for j:=1 to top_length do begin
-        if stats[i].typ = 'N' then
+        if stats_filter[i].typ = 'N' then
         begin
           if (stats_filter[i].kod = topp[j].kod) then begin
              topp[j].naklad:=stats_filter[i].mnozstvo*stats_filter[i].cena;
@@ -472,31 +480,36 @@ FILTROVANIE;
   priemer_predaj:=0;
   priemer_kvantita:=0;
   pocet_v_nakupe:=0;
-  for i:=1 to stats_length do begin //Priemer celkovy
-     if stats[i].typ = 'P' then begin
-       suma_nakupov:=suma_nakupov+stats[i].cena*stats[i].mnozstvo;
+  for i:=1 to stats_filter_length do begin //Priemer celkovy
+     if stats_filter[i].typ = 'P' then begin
+       suma_nakupov:=suma_nakupov+stats_filter[i].cena*stats_filter[i].mnozstvo;
        inc(pocet_nakupov);
      end;
   end;
-  priemer_predaj:=suma_nakupov / pocet_nakupov;
-  priemercena.caption:='Priemerna cena nakupu: '+FloattoStr(priemer_predaj);
+  if not (pocet_nakupov = 0) then priemer_predaj:=suma_nakupov / pocet_nakupov else priemer_predaj:=0;
+  priemercena.caption:='Priemerna cena nakupu: '+FloattoStrF(priemer_predaj, ffGeneral, 3, 2);
 
-   i:=1;
 
-    while i < stats_length do begin //priemer nakupov    NIEKDE JE TU PROBEL
-       if stats[i].typ = 'P' then begin
-          id_nakupu:=stats[i].id;
-          inc(pocet_nakupov);
-          while id_nakupu <> stats[i].id do begin
-             pocet_v_nakupe:=pocet_v_nakupe+stats[i].mnozstvo;
-             inc(i);
+  id_nakupu:=0;
+  pocet_nakupov:=0;
+  for i:=1 to stats_filter_length do begin
+     if stats_filter[i].typ = 'P' then begin
+        inc(pocet_nakupov);
+        if not (id_nakupu = stats_filter[i].id) then begin
+          id_nakupu:=stats_filter[i].id;
+          for j:=1 to stats_filter_length do begin
+             if (id_nakupu = stats_filter[j].id) then begin
+                inc(pocet_v_nakupe);
+             end;
           end;
-       end;
-       inc(i);
-    end;
+        end;
 
-    priemer_kvantita:=pocet_v_nakupe / pocet_nakupov;
-    priemerkvantita.caption:='Priemerna kvantita nakupu: '+FloatToStr(priemer_kvantita);
+
+     end;
+  end;
+    if not (pocet_nakupov = 0) then priemer_kvantita:=pocet_v_nakupe / pocet_nakupov else priemer_kvantita:=0;
+    priemerkvantita.caption:='Priemerna kvantita nakupu: '+FloatToStrF(priemer_kvantita, ffGeneral, 3, 2);
+
 
 
 
@@ -590,6 +603,17 @@ if ((StrToInt(OddatumP) < stats[i].datum) AND (stats[i].datum < StrToInt(PoDatum
 end;
 end;
 stats_filter_length:=j-1;
+end;
+
+procedure Tform1.spravmigraf;
+var odsadenie:integer;
+begin
+image1.canvas.Brush.color:=clwhite;
+image1.Canvas.fillrect(clientRect);
+odsadenie:=20;
+//vytvorenie asymptot
+image1.canvas.Line(0+odsadenie,0,0+odsadenie,500-odsadenie);
+image1.canvas.Line(0+odsadenie,500-odsadenie,500,500-odsadenie);
 end;
 
 end.

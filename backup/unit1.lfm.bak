@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 101
+  Left = 103
   Height = 536
-  Top = 164
+  Top = 175
   Width = 1273
   Caption = 'Form1'
   ClientHeight = 516
@@ -13,12 +13,12 @@ object Form1: TForm1
     Left = 528
     Height = 23
     Top = 24
-    Width = 83
+    Width = 79
     CenturyFrom = 1941
     MaxDate = 2958465
     MinDate = -53780
     TabOrder = 0
-    DateSeparator = '/'
+    DateSeparator = '.'
     TrailingSeparator = False
     TextForNullDate = 'NULL'
     LeadingZeros = True
@@ -57,7 +57,7 @@ object Form1: TForm1
   end
   object trzby: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 289
+    Left = 401
     Height = 15
     Top = 8
     Width = 55
@@ -67,7 +67,7 @@ object Form1: TForm1
   end
   object naklady: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 275
+    Left = 387
     Height = 15
     Top = 32
     Width = 69
@@ -142,7 +142,7 @@ object Form1: TForm1
   end
   object Priemercena: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 193
+    Left = 305
     Height = 15
     Top = 56
     Width = 151
@@ -152,7 +152,7 @@ object Form1: TForm1
   end
   object priemerkvantita: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 176
+    Left = 288
     Height = 15
     Top = 80
     Width = 168
@@ -188,7 +188,7 @@ object Form1: TForm1
   end
   object zisk: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 297
+    Left = 409
     Height = 15
     Top = 104
     Width = 47
