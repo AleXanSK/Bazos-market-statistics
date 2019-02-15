@@ -1,0 +1,5 @@
+graf
+meme -> string grid
+poposuvat grafiky UI
+Zobraz -> Zobraz všetky
+euro znak

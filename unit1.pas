@@ -68,10 +68,12 @@ type
     procedure FilterClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Kontrola_suborovTimer(Sender: TObject);
+    procedure MenuItem4Click(Sender: TObject);
     procedure PodlakoduClick(Sender: TObject);
     procedure PodlamenaClick(Sender: TObject);
     procedure poT10Click(Sender: TObject);    //PROC 3
     procedure ReloadClick(Sender: TObject);
+    procedure ScrollBar1Change(Sender: TObject);
     procedure Top10Click(Sender: TObject);    //PROC 2
     procedure nacitanie;
     procedure sort;
@@ -91,16 +93,16 @@ var
   ver_stati:integer; //verzie databaz
   ver_tovar:integer; //
 
-  stats:array[1..100] of nazvy_stat; //hlavne pole databaz
+  stats:array[1..1000] of nazvy_stat; //hlavne pole databaz
   stats_length:integer;              //dlžka pola (kolko riadkov)
 
-  topp:array[1..100] of nazvy_top;     //Zoradene produkty od naj po najmenej
+  topp:array[1..1000] of nazvy_top;     //Zoradene produkty od naj po najmenej
   top_length:integer;                 //Počet produktov
 
-  stats_filter:array[1..100] of nazvy_stat;   //filtrovane pole stats
+  stats_filter:array[1..1000] of nazvy_stat;   //filtrovane pole stats
   stats_filter_length:integer;
 
-  ptovar:array[1..100] of nazvy_tovar;
+  ptovar:array[1..1000] of nazvy_tovar;
   ptovar_length:integer;
 
   aktualna_proc:integer;
@@ -120,11 +122,11 @@ var i:integer;
     pom_s:string;
 begin
 //incializacia + logo
-memo1.clear;
+memo1.clear; Memo1.ScrollBars := ssVertical;
 image2.picture.LoadFromFile('logo_transparent.bmp');
 //Vyčistenie polí
 
- for i:=1 to 100 do begin
+ for i:=1 to stats_length do begin
        stats[i].id:=0;
        stats[i].kod:=0;
        stats[i].mnozstvo:=0;
@@ -157,9 +159,11 @@ procedure TForm1.DefaultView;
 var i:integer;
 begin
 //Default view
+memo1.clear;
 for i:=1 to top_length do
         memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
         aktualna_proc:=1;
+        zobrazujem.caption:='Zobrazujem: všetky tovary';
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
@@ -203,11 +207,17 @@ begin
      begin nacitanie; Vytvaranie_TOP; end;
 end;
 
+procedure TForm1.MenuItem4Click(Sender: TObject);
+begin
+   DefaultView;
+end;
+
 procedure TForm1.PodlakoduClick(Sender: TObject);
 var userstring:string;
     i,hladany_kod:integer;
 begin
 memo1.clear; zobrazujem.caption:='';
+aktualna_proc:=0;
  if not InputQuery('Kód', 'Aký má kód?', UserString) then begin zobrazujem.caption:=''; exit; end;
  if not TryStrtoInt(userstring,hladany_kod) then begin MsgErr('Was das?'); exit; end;
 
@@ -228,6 +238,7 @@ var userstring:string;
 
 begin
 memo1.clear;  zobrazujem.caption:='';
+aktualna_proc:=0;
  if not InputQuery('Meno', 'Ako sa volá?', UserString) then begin zobrazujem.caption:=''; exit; end;
 for i:=top_length downto 1 do begin
       if userstring = topp[i].meno then begin
@@ -265,9 +276,14 @@ begin
 memo1.clear;
 i:=top_length;
 j:=10;
+           while i > 0 do begin
+                 if not ((topp[i].naklad = 0) AND (topp[i].prijmy = 0)) then begin
+                    memo1.append(inttostr(j)+'.  '+topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
+                    inc(j,-1);
 
-           memo1.append(inttostr(j)+'.  '+topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
-           inc(j,-1);
+                 end;
+                 inc(i,-1)
+           end;
 
 zobrazujem.caption:='Zobrazujem: Top 10 najmenej predávaných produktov';
 aktualna_proc:=3;
@@ -283,6 +299,11 @@ case aktualna_proc of
      3:poT10.click;
      end;
   nacitanie;
+end;
+
+procedure TForm1.ScrollBar1Change(Sender: TObject);
+begin
+
 end;
 
 procedure TForm1.nacitanie;
@@ -552,7 +573,7 @@ procedure TForm1.Vytvaranie_TOP;
 var subor:textfile;
     verzia:integer;
     pom_s:string;
-    topp_local:array[1..100] of nazvy_top;
+    topp_local:array[1..1000] of nazvy_top;
     topp_local_length:integer;
     i,j,temp_kod,temp_prijmy,temp_naklad,temp_zisk:integer;
     temp_meno:string;

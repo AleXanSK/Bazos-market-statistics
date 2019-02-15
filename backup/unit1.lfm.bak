@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 379
+  Left = 99
   Height = 536
-  Top = 199
+  Top = 133
   Width = 1273
   Caption = 'Statisitky'
   ClientHeight = 516
@@ -57,10 +57,10 @@ object Form1: TForm1
   end
   object trzby: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 402
+    Left = 401
     Height = 15
     Top = 8
-    Width = 54
+    Width = 55
     Anchors = [akTop, akRight]
     Caption = 'Tržby: xxxx'
     ParentColor = False
@@ -202,10 +202,12 @@ object Form1: TForm1
     Top = 238
     Width = 142
     Caption = 'TESUJEM'
+    Enabled = False
     Font.Height = -27
     OnClick = Button1Click
     ParentFont = False
     TabOrder = 9
+    Visible = False
   end
   object Image1: TImage
     Left = 736
@@ -226,6 +228,7 @@ object Form1: TForm1
       Caption = 'Tovar'
       object MenuItem4: TMenuItem
         Caption = 'Zobraz:'
+        OnClick = MenuItem4Click
       end
       object Top10: TMenuItem
         Caption = '10 najviac predávaných'
