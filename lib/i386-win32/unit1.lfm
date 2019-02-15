@@ -1,9 +1,9 @@
 object Form1: TForm1
-  Left = 103
+  Left = 379
   Height = 536
-  Top = 175
+  Top = 199
   Width = 1273
-  Caption = 'Form1'
+  Caption = 'Statisitky'
   ClientHeight = 516
   ClientWidth = 1273
   Menu = MainMenu1
@@ -57,10 +57,10 @@ object Form1: TForm1
   end
   object trzby: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 401
+    Left = 402
     Height = 15
     Top = 8
-    Width = 55
+    Width = 54
     Anchors = [akTop, akRight]
     Caption = 'Tržby: xxxx'
     ParentColor = False
@@ -212,6 +212,12 @@ object Form1: TForm1
     Height = 500
     Top = 8
     Width = 500
+  end
+  object Image2: TImage
+    Left = 24
+    Height = 75
+    Top = 8
+    Width = 138
   end
   object MainMenu1: TMainMenu
     left = 24

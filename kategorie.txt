@@ -1,4 +1,4 @@
-1;Pivo a radler
-2;Vino
-3;Pes
-4;Ine
+Pivo a radler
+Kolac
+Pes
+Ine
