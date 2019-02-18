@@ -87,7 +87,8 @@ type
   public
 
   end;
-
+Const //PATH = 'Z:\INFProjekt2019\TimA\';
+      PATH = '';
 var
   Form1: TForm1;
   ver_stati:integer; //verzie databaz
@@ -139,13 +140,13 @@ image2.picture.LoadFromFile('logo_transparent.bmp');
 
 NACITANIE;
 //Ziskanie verzii
-AssignFile(subor,'statistiky_verzia.txt');
+AssignFile(subor,PATH+'STATISTIKY_VERZIA.txt');
 Reset(subor);
 ReadLn(subor,pom_s);
 ver_stati:=StrToInt(pom_s);
 CloseFile(subor);
 
-AssignFile(subor,'tovar_verzia.txt');
+AssignFile(subor,PATH+'TOVAR_VERZIA.txt');
 Reset(subor);
 ReadLn(subor,pom_s);
 ver_tovar:=StrToInt(pom_s);
@@ -161,7 +162,7 @@ begin
 //Default view
 memo1.clear;
 for i:=1 to top_length do
-        memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
+        memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+'€'+' má naklady '+IntToStr(topp[i].naklad)+'€'+' s celkovym ziskom: '+IntToStr(topp[i].zisk)+'€');
         aktualna_proc:=1;
         zobrazujem.caption:='Zobrazujem: všetky tovary';
 end;
@@ -191,13 +192,13 @@ var stati,tovarik:integer;
     subor:textfile;
     pom_s:string;
 begin
-  AssignFile(subor,'tovar_verzia.txt');
+  AssignFile(subor,PATH+'TOVAR_VERZIA.txt');
   Reset(subor);
   ReadLn(subor,pom_s);
   tovarik:=StrToInt(pom_s);
   Closefile(subor);
 
-  AssignFile(subor,'statistiky_verzia.txt');
+  AssignFile(subor,PATH+'STATISTIKY_VERZIA.txt');
   Reset(subor);
   ReadLn(subor,pom_s);
   stati:=StrToInt(pom_s);
@@ -223,7 +224,7 @@ aktualna_proc:=0;
 
 for i:=top_length downto 1 do begin
       if (hladany_kod = topp[i].kod) then begin
-        memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
+        memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+'€'+' má naklady '+IntToStr(topp[i].naklad)+'€'+' s celkovym ziskom: '+IntToStr(topp[i].zisk)+'€');
       end;
       end;
 
@@ -242,7 +243,7 @@ aktualna_proc:=0;
  if not InputQuery('Meno', 'Ako sa volá?', UserString) then begin zobrazujem.caption:=''; exit; end;
 for i:=top_length downto 1 do begin
       if userstring = topp[i].meno then begin
-        memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
+        memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+'€'+' má naklady '+IntToStr(topp[i].naklad)+'€'+' s celkovym ziskom: '+IntToStr(topp[i].zisk)+'€');
       end;
 zobrazujem.caption:='Zobrazujem: '+userString;
 end;
@@ -258,7 +259,7 @@ i:=1;
 j:=1;
   while not (j = 11) do begin
         if not ((topp[i].naklad = 0) AND (topp[i].prijmy = 0)) then begin
-           memo1.append(inttostr(j)+'.  '+topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
+           memo1.append(inttostr(j)+'.  '+topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+'€'+' má naklady '+IntToStr(topp[i].naklad)+'€'+' s celkovym ziskom: '+IntToStr(topp[i].zisk)+'€');
            inc(j);
            end;
         inc(i);
@@ -319,9 +320,9 @@ dokoncenenacitanie:=false;
 {STATISTIKY}
 
 while not dokoncenenacitanie do begin
-   if not FileExists('statistiky_lock.txt') then begin
-     F:=FileCreate('statistiky_lock.txt'); //zmakne databazu
-     Assignfile(subor,'statistiky.txt');
+   if not FileExists(PATH+'STATISTIKY_LOCK.txt') then begin
+     F:=FileCreate(PATH+'STATISTIKY_LOCK.txt'); //zmakne databazu
+     Assignfile(subor,PATH+'STATISTIKY.txt');
      Reset(subor);
      Readln(subor,pom_s);
      stats_length:=strtoint(pom_s);
@@ -349,7 +350,7 @@ while not dokoncenenacitanie do begin
            end;
      CloseFile(subor);
      FileClose(F);
-     DeleteFile('statistiky_lock.txt');
+     DeleteFile(PATH+'STATISTIKY_LOCK.txt');
      dokoncenenacitanie:=true;
    end;
 end; //KONIEC načítania statistik
@@ -359,9 +360,9 @@ dokoncenenacitanie:=false;
 {TOVAR to TOPP}
 
 while not dokoncenenacitanie do begin
-   if not FileExists('tovar_lock.txt') then begin
-     Assignfile(subor,'tovar.txt'); //ZACIATOK nacitania tovar (meno)
-     F:=FileCreate('tovar_lock.txt'); //zamkne tovar
+   if not FileExists(PATH+'TOVAR_LOCK.txt') then begin
+     Assignfile(subor,PATH+'TOVAR.txt'); //ZACIATOK nacitania tovar (meno)
+     F:=FileCreate(PATH+'TOVAR_LOCK.txt'); //zamkne tovar
      Reset(subor);
      Readln(subor,pom_s);
      dlzka:=strtoint(pom_s); //zisti velkost tovar.txt
@@ -382,7 +383,7 @@ while not dokoncenenacitanie do begin
            end; //KONIEC načítania statistik
      CloseFile(subor);
      FileClose(F);
-     DeleteFile('tovar_lock.txt');
+     DeleteFile(PATH+'TOVAR_LOCK.txt');
      dokoncenenacitanie:=true;
    end;
 end;
@@ -393,9 +394,9 @@ dokoncenenacitanie:=false;
   {KATEGORIE}
 
 while not dokoncenenacitanie do begin
-   if not FileExists('kategorie_lock.txt') then begin
-     AssignFile(subor,'kategorie.txt'); //Nacitanie KATEGORIE
-     F:=FileCreate('kategorie_lock.txt');
+   if not FileExists(PATH+'KATEGORIE_LOCK.txt') then begin
+     AssignFile(subor,PATH+'KATEGORIE.txt'); //Nacitanie KATEGORIE
+     F:=FileCreate(PATH+'KATEGORIE_LOCK.txt');
      Reset(subor);
 
      ReadLn(subor,pom_s);
@@ -409,7 +410,7 @@ while not dokoncenenacitanie do begin
 
      CloseFile(subor);
      FileClose(F);
-     DeleteFile('kategorie_lock.txt');
+     DeleteFile(PATH+'KATEGORIE_LOCK.txt');
      dokoncenenacitanie:=true;
    end;
 end;
@@ -418,9 +419,9 @@ dokoncenenacitanie:=false;
   {TOVAR}
 
 while not dokoncenenacitanie do begin
-   if not FileExists('tovar_lock.txt') then begin
-     AssignFile(subor,'tovar.txt'); //Nacitanie KATEGORIE
-     F:=FileCreate('tovar_lock.txt');
+   if not FileExists(PATH+'TOVAR_LOCK.txt') then begin
+     AssignFile(subor,PATH+'TOVAR.txt'); //Nacitanie KATEGORIE
+     F:=FileCreate(PATH+'TOVAR_LOCK.txt');
      Reset(subor);
      Readln(subor,pom_s);
      dlzka:=StrTOInt(pom_s);
@@ -434,7 +435,7 @@ while not dokoncenenacitanie do begin
 
      CloseFile(subor);
      FileClose(F);
-     DeleteFile('tovar_lock.txt');
+     DeleteFile(PATH+'TOVAR_LOCK.txt');
      dokoncenenacitanie:=true;
    end;
 end;
@@ -521,9 +522,13 @@ for i:=1 to top_length do begin   //vynulovanie topp
      trzby_p:=trzby_p+topp[i].prijmy;
 
   end;
-     trzby.caption:=         'Tržby: '+InttoStr(trzby_p);
-     naklady.caption:=       'Náklady: '+IntToStr(naklady_p);
-     zisk.caption:=          'Zisk: '+IntToStr(trzby_p-naklady_p);
+     trzby.caption:=         'Tržby: '+InttoStr(trzby_p)+'€';
+     naklady.caption:=       'Náklady: '+IntToStr(naklady_p)+'€';
+
+     if ((trzby_p-naklady_p) > 0) then
+     zisk.font.color:=clgreen else if ((trzby_p-naklady_p) = 0) then
+     zisk.font.color:=clDefault else zisk.font.color:=clred;
+     zisk.caption:=          'Zisk: '+IntToStr(trzby_p-naklady_p)+'€';
 
 
 
@@ -540,7 +545,7 @@ for i:=1 to top_length do begin   //vynulovanie topp
      end;
   end;
   if not (pocet_nakupov = 0) then priemer_predaj:=suma_nakupov / pocet_nakupov else priemer_predaj:=0;
-  priemercena.caption:='Priemerna cena nakupu: '+FloattoStrF(priemer_predaj, ffGeneral, 3, 2);
+  priemercena.caption:='Priemerna cena nakupu: '+FloattoStrF(priemer_predaj, ffGeneral, 3, 2)+'€';
 
 
   id_nakupu:=0;
@@ -639,14 +644,14 @@ For i := topp_local_length-1 DownTo 1 do
 
 //ZAPISOVANIE
 if topp_local_length > 5 then begin
-  AssignFile(subor,'top.txt');
+  AssignFile(subor,'TOP.txt');
   Rewrite(subor);
   For i:=1 to 5 do begin
       WriteLn(subor,IntToStr(topp_local[i].kod));
   end;
   CloseFile(subor);
 
-  AssignFile(subor,'top_verzia.txt');
+  AssignFile(subor,'TOP_VERZIA.txt');
   Reset(subor);
   ReadLn(subor,pom_s);
   verzia:=StrToInt(pom_s);
