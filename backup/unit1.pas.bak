@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, DateTimePicker, Forms, Controls, Graphics,
-  Dialogs, Menus, StdCtrls, ExtCtrls, LazFileUtils,
+  Dialogs, Menus, StdCtrls, ExtCtrls, Grids, LazFileUtils,
   DateUtils, MisUtils;
 //MisUtils: https://github.com/t-edson/MisUtils
 
@@ -39,6 +39,7 @@ type
     Filter: TButton;
     Image1: TImage;
     Image2: TImage;
+    gridus: TStringGrid;
     zisk: TLabel;
     Memo1: TMemo;
     MenuItem2: TMenuItem;
@@ -255,11 +256,21 @@ var
     i,j:integer;
 begin
 memo1.clear;
+for i:=1 to 10 do begin
+           gridus.Cells[1,i]:='';
+           gridus.Cells[2,i]:='';
+           gridus.Cells[3,i]:='';
+           gridus.Cells[4,i]:='';
+end;
 i:=1;
 j:=1;
   while not (j = 11) do begin
         if not ((topp[i].naklad = 0) AND (topp[i].prijmy = 0)) then begin
-           memo1.append(inttostr(j)+'.  '+topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+'€'+' má naklady '+IntToStr(topp[i].naklad)+'€'+' s celkovym ziskom: '+IntToStr(topp[i].zisk)+'€');
+           //memo1.append(inttostr(j)+'.  '+topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+'€'+' má naklady '+IntToStr(topp[i].naklad)+'€'+' s celkovym ziskom: '+IntToStr(topp[i].zisk)+'€');
+           gridus.Cells[1,j]:=topp[i].meno;
+           gridus.Cells[2,j]:=IntToStr(topp[i].prijmy)+'€';
+           gridus.Cells[3,j]:=IntToStr(topp[i].naklad)+'€';
+           gridus.Cells[4,j]:=IntToStr(topp[i].zisk)+'€';
            inc(j);
            end;
         inc(i);
@@ -275,12 +286,18 @@ procedure TForm1.poT10Click(Sender: TObject);
 var i,j:integer;
 begin
 memo1.clear;
+gridus.clear;
 i:=top_length;
 j:=10;
            while i > 0 do begin
                  if not ((topp[i].naklad = 0) AND (topp[i].prijmy = 0)) then begin
-                    memo1.append(inttostr(j)+'.  '+topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
-                    inc(j,-1);
+                    //memo1.append(inttostr(j)+'.  '+topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
+                    gridus.Cells[1,i]:=topp[i].meno;
+                     gridus.Cells[2,i]:=IntToStr(topp[i].prijmy)+'€';
+                     gridus.Cells[3,i]:=IntToStr(topp[i].naklad)+'€';
+                      gridus.Cells[4,i]:=IntToStr(topp[i].zisk)+'€';
+
+                   inc(j,-1);
 
                  end;
                  inc(i,-1)
