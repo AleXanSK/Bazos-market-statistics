@@ -40,8 +40,10 @@ type
     Image1: TImage;
     Image2: TImage;
     gridus: TStringGrid;
+    Label1: TLabel;
+    loadingImage: TImage;
+    loadingg: TTimer;
     zisk: TLabel;
-    Memo1: TMemo;
     MenuItem2: TMenuItem;
     Podlamena: TMenuItem;
     Podlakodu: TMenuItem;
@@ -69,12 +71,12 @@ type
     procedure FilterClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Kontrola_suborovTimer(Sender: TObject);
+    procedure loadinggTimer(Sender: TObject);
     procedure MenuItem4Click(Sender: TObject);
     procedure PodlakoduClick(Sender: TObject);
     procedure PodlamenaClick(Sender: TObject);
     procedure poT10Click(Sender: TObject);    //PROC 3
     procedure ReloadClick(Sender: TObject);
-    procedure ScrollBar1Change(Sender: TObject);
     procedure Top10Click(Sender: TObject);    //PROC 2
     procedure nacitanie;
     procedure sort;
@@ -83,6 +85,7 @@ type
     procedure filtrovanie;
     procedure spravmigraf;
     procedure defaultview;                    //PROC 1
+    procedure cislujmi(pocet:integer);
   private
 
   public
@@ -108,6 +111,7 @@ var
   ptovar_length:integer;
 
   aktualna_proc:integer;
+  frame:integer; //do loadingg timeru
 
 //  debugCount: qword;     //Debug
 
@@ -124,8 +128,8 @@ var i:integer;
     pom_s:string;
 begin
 //incializacia + logo
-memo1.clear; Memo1.ScrollBars := ssVertical;
 image2.picture.LoadFromFile('logo_transparent.bmp');
+frame:=0;
 //Vyčistenie polí
 
  for i:=1 to stats_length do begin
@@ -161,11 +165,24 @@ procedure TForm1.DefaultView;
 var i:integer;
 begin
 //Default view
-memo1.clear;
+{memo1.clear;
 for i:=1 to top_length do
         memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+'€'+' má naklady '+IntToStr(topp[i].naklad)+'€'+' s celkovym ziskom: '+IntToStr(topp[i].zisk)+'€');
-        aktualna_proc:=1;
-        zobrazujem.caption:='Zobrazujem: všetky tovary';
+
+        }
+gridus.rowcount:=top_length+1;
+cislujmi(gridus.rowcount);
+for i:=1 to top_length do begin
+    gridus.Cells[1,i]:=topp[i].meno;
+    gridus.Cells[2,i]:=IntToStr(topp[i].prijmy)+'€';
+    gridus.Cells[3,i]:=IntToStr(topp[i].naklad)+'€';
+    gridus.Cells[4,i]:=IntToStr(topp[i].zisk)+'€';
+
+
+
+      end;
+aktualna_proc:=1;
+zobrazujem.caption:='Zobrazujem: všetky tovary';
 end;
 
 procedure TForm1.Button1Click(Sender: TObject);
@@ -173,13 +190,12 @@ var pom_s:string;
     i:integer;
 begin
   spravmigraf;
-  for i:=1 to stats_length do memo1.append(stats[i].typ+'  '+IntToStr(stats[i].kod)+'  '+IntToStr(stats[i].cena)+'  '+IntToStr(stats[i].mnozstvo));
+  //for i:=1 to stats_length do memo1.append(stats[i].typ+'  '+IntToStr(stats[i].kod)+'  '+IntToStr(stats[i].cena)+'  '+IntToStr(stats[i].mnozstvo));
 end;
 
 procedure TForm1.FilterClick(Sender: TObject);
 begin
   top;
-  memo1.clear;
 zobrazujem.caption:='';
 case aktualna_proc of
      1:DefaultView;
@@ -209,6 +225,14 @@ begin
      begin nacitanie; Vytvaranie_TOP; end;
 end;
 
+procedure TForm1.loadinggTimer(Sender: TObject);
+begin
+
+  loadingImage.picture.loadfromfile('loading/loading_'+IntToStr(frame)+'.bmp');
+  inc(frame);
+  if frame > 39 then frame:=0;
+end;
+
 procedure TForm1.MenuItem4Click(Sender: TObject);
 begin
    DefaultView;
@@ -218,14 +242,14 @@ procedure TForm1.PodlakoduClick(Sender: TObject);
 var userstring:string;
     i,hladany_kod:integer;
 begin
-memo1.clear; zobrazujem.caption:='';
+zobrazujem.caption:='';
 aktualna_proc:=0;
  if not InputQuery('Kód', 'Aký má kód?', UserString) then begin zobrazujem.caption:=''; exit; end;
  if not TryStrtoInt(userstring,hladany_kod) then begin MsgErr('Was das?'); exit; end;
 
 for i:=top_length downto 1 do begin
       if (hladany_kod = topp[i].kod) then begin
-        memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+'€'+' má naklady '+IntToStr(topp[i].naklad)+'€'+' s celkovym ziskom: '+IntToStr(topp[i].zisk)+'€');
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!        memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+'€'+' má naklady '+IntToStr(topp[i].naklad)+'€'+' s celkovym ziskom: '+IntToStr(topp[i].zisk)+'€');
       end;
       end;
 
@@ -239,12 +263,12 @@ var userstring:string;
     i:integer;
 
 begin
-memo1.clear;  zobrazujem.caption:='';
+zobrazujem.caption:='';
 aktualna_proc:=0;
  if not InputQuery('Meno', 'Ako sa volá?', UserString) then begin zobrazujem.caption:=''; exit; end;
 for i:=top_length downto 1 do begin
       if userstring = topp[i].meno then begin
-        memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+'€'+' má naklady '+IntToStr(topp[i].naklad)+'€'+' s celkovym ziskom: '+IntToStr(topp[i].zisk)+'€');
+//!!!!!!!!!!!!!!!!!!!        memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+'€'+' má naklady '+IntToStr(topp[i].naklad)+'€'+' s celkovym ziskom: '+IntToStr(topp[i].zisk)+'€');
       end;
 zobrazujem.caption:='Zobrazujem: '+userString;
 end;
@@ -255,13 +279,8 @@ procedure TForm1.Top10Click(Sender: TObject);
 var
     i,j:integer;
 begin
-memo1.clear;
-for i:=1 to 10 do begin
-           gridus.Cells[1,i]:='';
-           gridus.Cells[2,i]:='';
-           gridus.Cells[3,i]:='';
-           gridus.Cells[4,i]:='';
-end;
+gridus.rowcount:=11;
+cislujmi(gridus.rowcount);
 i:=1;
 j:=1;
   while not (j = 11) do begin
@@ -285,17 +304,17 @@ end;
 procedure TForm1.poT10Click(Sender: TObject);
 var i,j:integer;
 begin
-memo1.clear;
-gridus.clear;
+gridus.rowcount:=11;
+cislujmi(gridus.rowcount);
 i:=top_length;
 j:=10;
            while i > 0 do begin
                  if not ((topp[i].naklad = 0) AND (topp[i].prijmy = 0)) then begin
                     //memo1.append(inttostr(j)+'.  '+topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
-                    gridus.Cells[1,i]:=topp[i].meno;
-                     gridus.Cells[2,i]:=IntToStr(topp[i].prijmy)+'€';
-                     gridus.Cells[3,i]:=IntToStr(topp[i].naklad)+'€';
-                      gridus.Cells[4,i]:=IntToStr(topp[i].zisk)+'€';
+                    gridus.Cells[1,j]:=topp[i].meno;
+                     gridus.Cells[2,j]:=IntToStr(topp[i].prijmy)+'€';
+                     gridus.Cells[3,j]:=IntToStr(topp[i].naklad)+'€';
+                      gridus.Cells[4,j]:=IntToStr(topp[i].zisk)+'€';
 
                    inc(j,-1);
 
@@ -309,7 +328,6 @@ end;
 
 procedure TForm1.ReloadClick(Sender: TObject);
 begin
-memo1.clear;
 zobrazujem.caption:='';
 case aktualna_proc of
      1:DefaultView;
@@ -319,11 +337,6 @@ case aktualna_proc of
   nacitanie;
 end;
 
-procedure TForm1.ScrollBar1Change(Sender: TObject);
-begin
-
-end;
-
 procedure TForm1.nacitanie;
 var subor:textfile;
     pom_s,meno:string;                   //pomocna pri nacitani
@@ -331,6 +344,9 @@ var subor:textfile;
     F:longint;                           //potrebuje to funkcia filedelete()
     dokoncenenacitanie:boolean;
 begin
+loadingimage.Visible:=true;
+loadingg.enabled:=true; //loading ikona
+
 dokoncenenacitanie:=false;
 
 
@@ -587,8 +603,18 @@ for i:=1 to top_length do begin   //vynulovanie topp
     priemerkvantita.caption:='Priemerna kvantita nakupu: '+FloatToStrF(priemer_kvantita, ffGeneral, 3, 2);
 
 
+ //Reloadne zobrazene vec
+ zobrazujem.caption:='';
+case aktualna_proc of
+     1:DefaultView;
+     2:Top10.click;
+     3:poT10.click;
+     end;
 
-
+{
+ loadingimage.Visible:=false;
+ loadingg.enabled:=false; //loading ikona
+}
 end;
 
 procedure TForm1.Vytvaranie_TOP;
@@ -677,6 +703,9 @@ if topp_local_length > 5 then begin
   Rewrite(subor);
   WriteLn(subor,IntToStr(verzia));
   CloseFile(subor);
+
+
+
 end;
 end;
 
@@ -777,6 +806,22 @@ y2:=0;
 
 
 
+
+end;
+
+procedure TForm1.cislujmi(pocet:integer);
+var i,j:integer;
+begin
+pocet:=pocet-1;
+for i:=1 to pocet do begin
+    gridus.cells[0,i]:=IntToStr(i)+'.';
+end;
+//Čistenie
+for i:=1 to 4 do begin
+    for j:=1 to pocet do begin
+        gridus.cells[i,j]:='';
+    end;
+   end;
 
 end;
 
