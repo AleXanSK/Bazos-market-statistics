@@ -195,7 +195,8 @@ end;
 
 procedure TForm1.FilterClick(Sender: TObject);
 begin
-  top;
+  //top;
+  nacitanie;
 zobrazujem.caption:='';
 case aktualna_proc of
      1:DefaultView;
@@ -250,6 +251,15 @@ aktualna_proc:=0;
 for i:=top_length downto 1 do begin
       if (hladany_kod = topp[i].kod) then begin
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!        memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+'€'+' má naklady '+IntToStr(topp[i].naklad)+'€'+' s celkovym ziskom: '+IntToStr(topp[i].zisk)+'€');
+gridus.rowcount:=1+1;
+cislujmi(gridus.rowcount);
+    gridus.Cells[1,1]:=topp[i].meno;
+    gridus.Cells[2,1]:=IntToStr(topp[i].prijmy)+'€';
+    gridus.Cells[3,1]:=IntToStr(topp[i].naklad)+'€';
+    gridus.Cells[4,1]:=IntToStr(topp[i].zisk)+'€';
+
+
+
       end;
       end;
 
@@ -269,6 +279,13 @@ aktualna_proc:=0;
 for i:=top_length downto 1 do begin
       if userstring = topp[i].meno then begin
 //!!!!!!!!!!!!!!!!!!!        memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+'€'+' má naklady '+IntToStr(topp[i].naklad)+'€'+' s celkovym ziskom: '+IntToStr(topp[i].zisk)+'€');
+        gridus.rowcount:=1+1;
+cislujmi(gridus.rowcount);
+    gridus.Cells[1,1]:=topp[i].meno;
+    gridus.Cells[2,1]:=IntToStr(topp[i].prijmy)+'€';
+    gridus.Cells[3,1]:=IntToStr(topp[i].naklad)+'€';
+    gridus.Cells[4,1]:=IntToStr(topp[i].zisk)+'€';
+
       end;
 zobrazujem.caption:='Zobrazujem: '+userString;
 end;

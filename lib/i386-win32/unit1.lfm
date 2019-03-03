@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 60
+  Left = 436
   Height = 789
-  Top = 16
+  Top = 67
   Width = 1300
   Caption = 'Statisitky'
   ClientHeight = 769
@@ -167,9 +167,9 @@ object Form1: TForm1
     ParentColor = False
   end
   object Reload: TButton
-    Left = 1136
+    Left = 1152
     Height = 25
-    Top = 288
+    Top = 736
     Width = 80
     Caption = 'Reload'
     OnClick = ReloadClick
@@ -220,7 +220,7 @@ object Form1: TForm1
     Height = 432
     Top = 296
     Width = 509
-    DefaultColWidth = 100
+    DefaultColWidth = 120
     RowCount = 11
     TabOrder = 9
     TitleFont.CharSet = ANSI_CHARSET
@@ -228,6 +228,13 @@ object Form1: TForm1
     TitleFont.Name = 'Times New Roman'
     TitleFont.Pitch = fpVariable
     TitleFont.Quality = fqDraft
+    ColWidths = (
+      23
+      120
+      120
+      120
+      120
+    )
     Cells = (
       14
       0
@@ -275,9 +282,9 @@ object Form1: TForm1
     )
   end
   object loadingImage: TImage
-    Left = 1160
+    Left = 1240
     Height = 50
-    Top = 232
+    Top = 712
     Width = 50
   end
   object Label1: TLabel
