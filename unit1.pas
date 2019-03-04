@@ -322,7 +322,11 @@ procedure TForm1.poT10Click(Sender: TObject);
 var i,j:integer;
 begin
 gridus.rowcount:=11;
-cislujmi(gridus.rowcount);
+j:=10;
+for i:=1 to 10 do begin
+    gridus.cells[0,i]:=IntToStr(j)+'.';
+    inc(j,-1);
+end;
 i:=top_length;
 j:=10;
            while i > 0 do begin
@@ -833,7 +837,7 @@ pocet:=pocet-1;
 for i:=1 to pocet do begin
     gridus.cells[0,i]:=IntToStr(i)+'.';
 end;
-//Čistenie
+//Čistenie dát
 for i:=1 to 4 do begin
     for j:=1 to pocet do begin
         gridus.cells[i,j]:='';

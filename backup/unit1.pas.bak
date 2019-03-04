@@ -279,6 +279,13 @@ aktualna_proc:=0;
 for i:=top_length downto 1 do begin
       if userstring = topp[i].meno then begin
 //!!!!!!!!!!!!!!!!!!!        memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+'€'+' má naklady '+IntToStr(topp[i].naklad)+'€'+' s celkovym ziskom: '+IntToStr(topp[i].zisk)+'€');
+        gridus.rowcount:=1+1;
+cislujmi(gridus.rowcount);
+    gridus.Cells[1,1]:=topp[i].meno;
+    gridus.Cells[2,1]:=IntToStr(topp[i].prijmy)+'€';
+    gridus.Cells[3,1]:=IntToStr(topp[i].naklad)+'€';
+    gridus.Cells[4,1]:=IntToStr(topp[i].zisk)+'€';
+
       end;
 zobrazujem.caption:='Zobrazujem: '+userString;
 end;
@@ -315,7 +322,11 @@ procedure TForm1.poT10Click(Sender: TObject);
 var i,j:integer;
 begin
 gridus.rowcount:=11;
-cislujmi(gridus.rowcount);
+j:=10;
+for i:=10 to 1 do begin
+    gridus.cells[0,i]:=IntToStr(j)+'.';
+    inc(j,-1);
+end;
 i:=top_length;
 j:=10;
            while i > 0 do begin
@@ -826,7 +837,7 @@ pocet:=pocet-1;
 for i:=1 to pocet do begin
     gridus.cells[0,i]:=IntToStr(i)+'.';
 end;
-//Čistenie
+//Čistenie dát
 for i:=1 to 4 do begin
     for j:=1 to pocet do begin
         gridus.cells[i,j]:='';
