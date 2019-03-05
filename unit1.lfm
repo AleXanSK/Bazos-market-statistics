@@ -1,11 +1,11 @@
 object Form1: TForm1
-  Left = 436
-  Height = 789
-  Top = 67
-  Width = 1300
+  Left = 416
+  Height = 774
+  Top = 20
+  Width = 725
   Caption = 'Statisitky'
-  ClientHeight = 769
-  ClientWidth = 1300
+  ClientHeight = 754
+  ClientWidth = 725
   Color = 13420731
   Font.CharSet = ANSI_CHARSET
   Font.Height = -16
@@ -63,9 +63,9 @@ object Form1: TForm1
   end
   object trzby: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 464
+    Left = 482
     Height = 19
-    Top = 176
+    Top = 168
     Width = 69
     Anchors = [akTop, akRight]
     Caption = 'Tržby: xxxx'
@@ -73,9 +73,9 @@ object Form1: TForm1
   end
   object naklady: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 446
+    Left = 464
     Height = 19
-    Top = 200
+    Top = 192
     Width = 87
     Anchors = [akTop, akRight]
     Caption = 'Náklady: xxxx'
@@ -148,9 +148,9 @@ object Form1: TForm1
   end
   object Priemercena: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 357
+    Left = 375
     Height = 19
-    Top = 248
+    Top = 240
     Width = 176
     Anchors = [akTop, akRight]
     Caption = 'Priemerna cena nakupu: xxxx'
@@ -158,44 +158,45 @@ object Form1: TForm1
   end
   object priemerkvantita: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 338
+    Left = 356
     Height = 19
-    Top = 272
+    Top = 264
     Width = 195
     Anchors = [akTop, akRight]
     Caption = 'Priemerna kvantita nakupu: xxxx'
     ParentColor = False
   end
   object Reload: TButton
-    Left = 1152
+    Left = 544
     Height = 25
-    Top = 736
+    Top = 702
     Width = 80
     Caption = 'Reload'
     OnClick = ReloadClick
     TabOrder = 7
   end
   object Zobrazujem: TLabel
-    Left = 16
-    Height = 1
-    Top = 440
-    Width = 1
+    Left = 24
+    Height = 19
+    Top = 728
+    Width = 22
+    Caption = 'Pes'
     ParentColor = False
   end
   object zisk: TLabel
     AnchorSideRight.Side = asrBottom
-    Left = 472
+    Left = 490
     Height = 19
-    Top = 224
+    Top = 216
     Width = 61
     Anchors = [akTop, akRight]
     Caption = 'Zisk: xxxx'
     ParentColor = False
   end
   object Button1: TButton
-    Left = 768
+    Left = 1168
     Height = 29
-    Top = 197
+    Top = 24
     Width = 142
     Caption = 'TESUJEM'
     Font.Height = -27
@@ -204,9 +205,9 @@ object Form1: TForm1
     TabOrder = 8
   end
   object Image1: TImage
-    Left = 616
+    Left = 1016
     Height = 500
-    Top = 228
+    Top = 55
     Width = 500
   end
   object Image2: TImage
@@ -218,7 +219,7 @@ object Form1: TForm1
   object gridus: TStringGrid
     Left = 24
     Height = 432
-    Top = 296
+    Top = 288
     Width = 509
     DefaultColWidth = 120
     RowCount = 11
@@ -282,9 +283,9 @@ object Form1: TForm1
     )
   end
   object loadingImage: TImage
-    Left = 1240
+    Left = 632
     Height = 50
-    Top = 712
+    Top = 678
     Width = 50
   end
   object Label1: TLabel
@@ -300,6 +301,14 @@ object Form1: TForm1
     Font.Quality = fqDraft
     ParentColor = False
     ParentFont = False
+  end
+  object pocetnacitani: TLabel
+    Left = 632
+    Height = 19
+    Top = 654
+    Width = 38
+    Caption = 'Pocet:'
+    ParentColor = False
   end
   object MainMenu1: TMainMenu
     left = 1136

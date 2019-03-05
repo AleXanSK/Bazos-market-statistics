@@ -41,6 +41,7 @@ type
     Image2: TImage;
     gridus: TStringGrid;
     Label1: TLabel;
+    pocetnacitani: TLabel;
     loadingImage: TImage;
     loadingg: TTimer;
     zisk: TLabel;
@@ -91,8 +92,8 @@ type
   public
 
   end;
-Const //PATH = 'Z:\INFProjekt2019\TimA\';
-      PATH = '';
+Const PATH = 'Z:\INFProjekt2019\TimA\';
+      //PATH = '';
 var
   Form1: TForm1;
   ver_stati:integer; //verzie databaz
@@ -114,6 +115,7 @@ var
   frame:integer; //do loadingg timeru
 
 //  debugCount: qword;     //Debug
+pocet_nacitani:integer;
 
 
 implementation
@@ -132,30 +134,9 @@ image2.picture.LoadFromFile('logo_transparent.bmp');
 frame:=0;
 //Vyčistenie polí
 
- for i:=1 to stats_length do begin
-       stats[i].id:=0;
-       stats[i].kod:=0;
-       stats[i].mnozstvo:=0;
-       stats[i].cena:=0;
-       topp[i].kod:=0;
-       topp[i].prijmy:=0;
-       topp[i].naklad:=0;
-       topp[i].zisk:=0;
- end;
 
+ pocet_nacitani:=0;
 NACITANIE;
-//Ziskanie verzii
-AssignFile(subor,PATH+'STATISTIKY_VERZIA.txt');
-Reset(subor);
-ReadLn(subor,pom_s);
-ver_stati:=StrToInt(pom_s);
-CloseFile(subor);
-
-AssignFile(subor,PATH+'TOVAR_VERZIA.txt');
-Reset(subor);
-ReadLn(subor,pom_s);
-ver_tovar:=StrToInt(pom_s);
-CloseFile(subor);
 
 Podatum.date:=date;
 DefaultView;
@@ -245,8 +226,8 @@ var userstring:string;
 begin
 zobrazujem.caption:='';
 aktualna_proc:=0;
- if not InputQuery('Kód', 'Aký má kód?', UserString) then begin zobrazujem.caption:=''; exit; end;
- if not TryStrtoInt(userstring,hladany_kod) then begin MsgErr('Was das?'); exit; end;
+ if not InputQuery('Kód', 'Aký má kód?', UserString) then begin zobrazujem.caption:=''; gridus.rowcount:=2; cislujmi(2); exit; end;
+ if not TryStrtoInt(userstring,hladany_kod) then begin MsgErr('Was das?'); gridus.rowcount:=2; cislujmi(2); exit; end;
 
 for i:=top_length downto 1 do begin
       if (hladany_kod = topp[i].kod) then begin
@@ -275,7 +256,8 @@ var userstring:string;
 begin
 zobrazujem.caption:='';
 aktualna_proc:=0;
- if not InputQuery('Meno', 'Ako sa volá?', UserString) then begin zobrazujem.caption:=''; exit; end;
+ if not InputQuery('Meno', 'Ako sa volá?', UserString) then begin zobrazujem.caption:=''; gridus.rowcount:=2; cislujmi(2); exit; end;
+ gridus.rowcount:=2; cislujmi(2);
 for i:=top_length downto 1 do begin
       if userstring = topp[i].meno then begin
 //!!!!!!!!!!!!!!!!!!!        memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+'€'+' má naklady '+IntToStr(topp[i].naklad)+'€'+' s celkovym ziskom: '+IntToStr(topp[i].zisk)+'€');
@@ -349,13 +331,15 @@ end;
 
 procedure TForm1.ReloadClick(Sender: TObject);
 begin
-zobrazujem.caption:='';
-case aktualna_proc of
+
+
+  nacitanie;
+  zobrazujem.caption:='';
+  case aktualna_proc of
      1:DefaultView;
      2:Top10.click;
      3:poT10.click;
      end;
-  nacitanie;
 end;
 
 procedure TForm1.nacitanie;
@@ -367,7 +351,29 @@ var subor:textfile;
 begin
 loadingimage.Visible:=true;
 loadingg.enabled:=true; //loading ikona
+for i:=1 to stats_length do begin
+      stats[i].id:=0;
+      stats[i].kod:=0;
+      stats[i].mnozstvo:=0;
+      stats[i].cena:=0;
+      topp[i].kod:=0;
+      topp[i].prijmy:=0;
+      topp[i].naklad:=0;
+      topp[i].zisk:=0;
+end;
+//Verzia
+AssignFile(subor,PATH+'STATISTIKY_VERZIA.txt');
+Reset(subor);
+ReadLn(subor,pom_s);
+ver_stati:=StrToInt(pom_s);
+CloseFile(subor);
 
+AssignFile(subor,PATH+'TOVAR_VERZIA.txt');
+Reset(subor);
+ReadLn(subor,pom_s);
+ver_tovar:=StrToInt(pom_s);
+CloseFile(subor);
+//Verzia
 dokoncenenacitanie:=false;
 
 
@@ -375,7 +381,7 @@ dokoncenenacitanie:=false;
 
 while not dokoncenenacitanie do begin
    if not FileExists(PATH+'STATISTIKY_LOCK.txt') then begin
-     F:=FileCreate(PATH+'STATISTIKY_LOCK.txt'); //zmakne databazu
+     F:=FileCreate(PATH+'STATISTIKY_LOCK.txt'); //zamkne databazu
      Assignfile(subor,PATH+'STATISTIKY.txt');
      Reset(subor);
      Readln(subor,pom_s);
@@ -494,6 +500,8 @@ while not dokoncenenacitanie do begin
    end;
 end;
 sort;
+inc(pocet_nacitani);
+pocetnacitani.caption:='Pocet: '+InttoStr(pocet_nacitani);
 end;
 
 procedure TForm1.sort;
@@ -530,7 +538,13 @@ top;
 
 
   			End;
-
+  //Reloadne zobrazene vec
+  zobrazujem.caption:='';
+ case aktualna_proc of
+      1:DefaultView;
+      2:Top10.click;
+      3:poT10.click;
+      end;
 
 end;
 
@@ -624,13 +638,7 @@ for i:=1 to top_length do begin   //vynulovanie topp
     priemerkvantita.caption:='Priemerna kvantita nakupu: '+FloatToStrF(priemer_kvantita, ffGeneral, 3, 2);
 
 
- //Reloadne zobrazene vec
- zobrazujem.caption:='';
-case aktualna_proc of
-     1:DefaultView;
-     2:Top10.click;
-     3:poT10.click;
-     end;
+
 
 {
  loadingimage.Visible:=false;
