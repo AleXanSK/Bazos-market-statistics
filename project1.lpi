@@ -9,6 +9,7 @@
       <Title Value="Bazos Market Statistiky"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
+      <Icon Value="0"/>
     </General>
     <BuildModes Count="1">
       <Item1 Name="Default" Default="True"/>
@@ -58,9 +59,6 @@
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>
-      <Debugging>
-        <DebugInfoType Value="dsDwarf2Set"/>
-      </Debugging>
       <Options>
         <Win32>
           <GraphicApplication Value="True"/>

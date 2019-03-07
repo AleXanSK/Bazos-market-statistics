@@ -38,6 +38,7 @@ type
     Button1: TButton;
     Label2: TLabel;
     cas: TTimer;
+    MenuItem3: TMenuItem;
     Top10butt: TButton;
     poT10butt: TButton;
     DefaultViewbutt: TButton;
@@ -74,6 +75,7 @@ type
     MenuItem4: TMenuItem;
     procedure Button1Click(Sender: TObject);
     procedure DefaultViewbuttClick(Sender: TObject);
+    procedure MenuItem3Click(Sender: TObject);
     procedure poT10buttClick(Sender: TObject);
     procedure casTimer(Sender: TObject);
     procedure Top10buttClick(Sender: TObject);
@@ -100,8 +102,8 @@ type
   public
 
   end;
-Const PATH = 'Z:\INFProjekt2019\TimA\';
-      //PATH = '';
+Const //PATH = 'Z:\INFProjekt2019\TimA\';
+      PATH = '';
 var
   Form1: TForm1;
   ver_stati:integer; //verzie databaz
@@ -238,7 +240,7 @@ zobrazujem.caption:='';
 aktualna_proc:=0;
  if not InputQuery('Kód', 'Aký má kód?', UserString) then begin zobrazujem.caption:=''; gridus.rowcount:=2; cislujmi(2); exit; end;
  if not TryStrtoInt(userstring,hladany_kod) then begin MsgErr('Was das?'); gridus.rowcount:=2; cislujmi(2); exit; end;
-
+ gridus.rowcount:=2; cislujmi(2);
 for i:=top_length downto 1 do begin
       if (hladany_kod = topp[i].kod) then begin
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!        memo1.append(topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+'€'+' má naklady '+IntToStr(topp[i].naklad)+'€'+' s celkovym ziskom: '+IntToStr(topp[i].zisk)+'€');
@@ -319,6 +321,11 @@ for i:=1 to 10 do begin
     gridus.cells[0,i]:=IntToStr(j)+'.';
     inc(j,-1);
 end;
+for i:=1 to 4 do begin
+    for j:=1 to gridus.rowcount-1 do begin
+        gridus.cells[i,j]:='';
+    end;
+   end;
 i:=top_length;
 j:=1;
            repeat
@@ -332,10 +339,10 @@ j:=1;
                    inc(j);
 
                  end;
-                 inc(i,-1)
+                 inc(i,-1);
+                 if i < 1 then j:=10;
 
-
-           until i=top_length-10;
+           until j=10;
 
 zobrazujem.caption:='Zobrazujem: Top 10 najmenej predávaných produktov';
 aktualna_proc:=3;
@@ -627,8 +634,8 @@ for i:=1 to top_length do begin   //vynulovanie topp
        inc(pocet_nakupov);
      end;
   end;
-  if not (pocet_nakupov = 0) then priemer_predaj:=suma_nakupov / pocet_nakupov else priemer_predaj:=0;
-  priemercena.caption:='Priemerna cena nakupu: '+FloattoStrF(priemer_predaj*-1, ffFixed, 3, 2)+'€';
+  if not (pocet_nakupov = 0) then priemer_predaj:=(suma_nakupov / pocet_nakupov)/100 else priemer_predaj:=0;
+  priemercena.caption:='Priemerna cena nakupu: '+FloattoStrF(priemer_predaj, ffFixed, 3, 2)+'€';
 
 
   id_nakupu:=0;
@@ -879,6 +886,11 @@ end;
 procedure TForm1.DefaultViewbuttClick(Sender: TObject);
 begin
   DefaultView;
+end;
+
+procedure TForm1.MenuItem3Click(Sender: TObject);
+begin
+  halt;
 end;
 
 
