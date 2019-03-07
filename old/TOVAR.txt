@@ -1,0 +1,15 @@
+14
+111;Pivo
+100;Radler
+110;Pifko
+210;Vino
+350;Pes
+351;Kolacovy pes
+352;Palacovy pes
+353;Biedny pes
+354;Dobry pes
+355;Dalsi pes
+356;A dalsi pes
+357;Peeeess
+410;Ine veci
+411;Palacinka

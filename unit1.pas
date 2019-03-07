@@ -25,9 +25,9 @@ type
   nazvy_top = record
     meno:string;
     kod:integer;
-    prijmy:integer;
-    naklad:integer;
-    zisk:integer;
+    prijmy:real;
+    naklad:real;
+    zisk:real;
   end;
   nazvy_tovar = record
     meno:string;
@@ -36,12 +36,16 @@ type
 
   TForm1 = class(TForm)
     Button1: TButton;
+    Label2: TLabel;
+    cas: TTimer;
+    Top10butt: TButton;
+    poT10butt: TButton;
+    DefaultViewbutt: TButton;
     Filter: TButton;
     Image1: TImage;
     Image2: TImage;
     gridus: TStringGrid;
     Label1: TLabel;
-    pocetnacitani: TLabel;
     loadingImage: TImage;
     loadingg: TTimer;
     zisk: TLabel;
@@ -69,6 +73,10 @@ type
     poT10: TMenuItem;
     MenuItem4: TMenuItem;
     procedure Button1Click(Sender: TObject);
+    procedure DefaultViewbuttClick(Sender: TObject);
+    procedure poT10buttClick(Sender: TObject);
+    procedure casTimer(Sender: TObject);
+    procedure Top10buttClick(Sender: TObject);
     procedure FilterClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Kontrola_suborovTimer(Sender: TObject);
@@ -155,9 +163,9 @@ gridus.rowcount:=top_length+1;
 cislujmi(gridus.rowcount);
 for i:=1 to top_length do begin
     gridus.Cells[1,i]:=topp[i].meno;
-    gridus.Cells[2,i]:=IntToStr(topp[i].prijmy)+'€';
-    gridus.Cells[3,i]:=IntToStr(topp[i].naklad)+'€';
-    gridus.Cells[4,i]:=IntToStr(topp[i].zisk)+'€';
+    gridus.Cells[2,i]:=FloatToStr(topp[i].prijmy)+'€';
+    gridus.Cells[3,i]:=FloatToStr(topp[i].naklad)+'€';
+    gridus.Cells[4,i]:=FloatToStr(topp[i].zisk)+'€';
 
 
 
@@ -173,6 +181,7 @@ begin
   spravmigraf;
   //for i:=1 to stats_length do memo1.append(stats[i].typ+'  '+IntToStr(stats[i].kod)+'  '+IntToStr(stats[i].cena)+'  '+IntToStr(stats[i].mnozstvo));
 end;
+
 
 procedure TForm1.FilterClick(Sender: TObject);
 begin
@@ -207,6 +216,7 @@ begin
      begin nacitanie; Vytvaranie_TOP; end;
 end;
 
+
 procedure TForm1.loadinggTimer(Sender: TObject);
 begin
 
@@ -235,9 +245,9 @@ for i:=top_length downto 1 do begin
 gridus.rowcount:=1+1;
 cislujmi(gridus.rowcount);
     gridus.Cells[1,1]:=topp[i].meno;
-    gridus.Cells[2,1]:=IntToStr(topp[i].prijmy)+'€';
-    gridus.Cells[3,1]:=IntToStr(topp[i].naklad)+'€';
-    gridus.Cells[4,1]:=IntToStr(topp[i].zisk)+'€';
+    gridus.Cells[2,1]:=FloatToStr(topp[i].prijmy)+'€';
+    gridus.Cells[3,1]:=FloatToStr(topp[i].naklad)+'€';
+    gridus.Cells[4,1]:=FloatToStr(topp[i].zisk)+'€';
 
 
 
@@ -264,9 +274,9 @@ for i:=top_length downto 1 do begin
         gridus.rowcount:=1+1;
 cislujmi(gridus.rowcount);
     gridus.Cells[1,1]:=topp[i].meno;
-    gridus.Cells[2,1]:=IntToStr(topp[i].prijmy)+'€';
-    gridus.Cells[3,1]:=IntToStr(topp[i].naklad)+'€';
-    gridus.Cells[4,1]:=IntToStr(topp[i].zisk)+'€';
+    gridus.Cells[2,1]:=FloatToStr(topp[i].prijmy)+'€';
+    gridus.Cells[3,1]:=FloatToStr(topp[i].naklad)+'€';
+    gridus.Cells[4,1]:=FloatToStr(topp[i].zisk)+'€';
 
       end;
 zobrazujem.caption:='Zobrazujem: '+userString;
@@ -286,9 +296,9 @@ j:=1;
         if not ((topp[i].naklad = 0) AND (topp[i].prijmy = 0)) then begin
            //memo1.append(inttostr(j)+'.  '+topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+'€'+' má naklady '+IntToStr(topp[i].naklad)+'€'+' s celkovym ziskom: '+IntToStr(topp[i].zisk)+'€');
            gridus.Cells[1,j]:=topp[i].meno;
-           gridus.Cells[2,j]:=IntToStr(topp[i].prijmy)+'€';
-           gridus.Cells[3,j]:=IntToStr(topp[i].naklad)+'€';
-           gridus.Cells[4,j]:=IntToStr(topp[i].zisk)+'€';
+           gridus.Cells[2,j]:=FloatToStr(topp[i].prijmy)+'€';
+           gridus.Cells[3,j]:=FloatToStr(topp[i].naklad)+'€';
+           gridus.Cells[4,j]:=FloatToStr(topp[i].zisk)+'€';
            inc(j);
            end;
         inc(i);
@@ -310,20 +320,22 @@ for i:=1 to 10 do begin
     inc(j,-1);
 end;
 i:=top_length;
-j:=10;
-           while i > 0 do begin
+j:=1;
+           repeat
                  if not ((topp[i].naklad = 0) AND (topp[i].prijmy = 0)) then begin
                     //memo1.append(inttostr(j)+'.  '+topp[i].meno+' má aktualne prijmy: '+IntToStr(topp[i].prijmy)+' má naklady '+IntToStr(topp[i].naklad)+' s celkovym ziskom: '+IntToStr(topp[i].zisk));
                     gridus.Cells[1,j]:=topp[i].meno;
-                     gridus.Cells[2,j]:=IntToStr(topp[i].prijmy)+'€';
-                     gridus.Cells[3,j]:=IntToStr(topp[i].naklad)+'€';
-                      gridus.Cells[4,j]:=IntToStr(topp[i].zisk)+'€';
+                     gridus.Cells[2,j]:=FloatToStr(topp[i].prijmy)+'€';
+                     gridus.Cells[3,j]:=FloatToStr(topp[i].naklad)+'€';
+                      gridus.Cells[4,j]:=FloatToStr(topp[i].zisk)+'€';
 
-                   inc(j,-1);
+                   inc(j);
 
                  end;
                  inc(i,-1)
-           end;
+
+
+           until i=top_length-10;
 
 zobrazujem.caption:='Zobrazujem: Top 10 najmenej predávaných produktov';
 aktualna_proc:=3;
@@ -380,6 +392,8 @@ dokoncenenacitanie:=false;
 {STATISTIKY}
 
 while not dokoncenenacitanie do begin
+
+
    if not FileExists(PATH+'STATISTIKY_LOCK.txt') then begin
      F:=FileCreate(PATH+'STATISTIKY_LOCK.txt'); //zamkne databazu
      Assignfile(subor,PATH+'STATISTIKY.txt');
@@ -413,6 +427,7 @@ while not dokoncenenacitanie do begin
      DeleteFile(PATH+'STATISTIKY_LOCK.txt');
      dokoncenenacitanie:=true;
    end;
+
 end; //KONIEC načítania statistik
 
 
@@ -500,12 +515,11 @@ while not dokoncenenacitanie do begin
    end;
 end;
 sort;
-inc(pocet_nacitani);
-pocetnacitani.caption:='Pocet: '+InttoStr(pocet_nacitani);
 end;
 
 procedure TForm1.sort;
-var i,j,temp_kod,temp_prijmy,temp_naklad,temp_zisk:integer;
+var i,j,temp_kod:integer;
+    temp_prijmy,temp_naklad,temp_zisk:real;
     temp_meno:string;
 begin
 top;
@@ -550,9 +564,10 @@ end;
 
 procedure TForm1.top; {Pridava celkove naklady a celkove prijmy do top[i]}
 var i,j:integer;
-    naklady_p,trzby_p,zisk_p,priemerna_cena,priemerna_kvantita:integer;
+    naklady_p,trzby_p,zisk_p,priemerna_cena,priemerna_kvantita:real;
     suma_nakupov,pocet_nakupov,id_nakupu,pocet_v_nakupe:integer;
     priemer_predaj, priemer_kvantita:currency;
+    dokoncenenacitanie:boolean;
 begin
 FILTROVANIE;
 for i:=1 to top_length do begin   //vynulovanie topp
@@ -568,7 +583,7 @@ for i:=1 to top_length do begin   //vynulovanie topp
         if stats_filter[i].typ = 'N' then
         begin
           if (stats_filter[i].kod = topp[j].kod) then begin
-             topp[j].naklad:=stats_filter[i].mnozstvo*stats_filter[i].cena;
+             topp[j].naklad:=topp[j].prijmy+(stats_filter[i].mnozstvo*stats_filter[i].cena)/100;
           end;
 
         end;
@@ -576,7 +591,7 @@ for i:=1 to top_length do begin   //vynulovanie topp
         if stats_filter[i].typ = 'P' then
            begin
           if (stats_filter[i].kod = topp[j].kod) then begin
-             topp[j].prijmy:=stats_filter[i].mnozstvo*stats_filter[i].cena;
+             topp[j].prijmy:=topp[j].prijmy+(stats_filter[i].mnozstvo*stats_filter[i].cena)/100;
            end;
         end;
      end;
@@ -590,13 +605,13 @@ for i:=1 to top_length do begin   //vynulovanie topp
      trzby_p:=trzby_p+topp[i].prijmy;
 
   end;
-     trzby.caption:=         'Tržby: '+InttoStr(trzby_p)+'€';
-     naklady.caption:=       'Náklady: '+IntToStr(naklady_p)+'€';
+     trzby.caption:=         'Tržby: '+FloatToStr(trzby_p)+'€';
+     naklady.caption:=       'Náklady: '+FloatToStr(naklady_p)+'€';
 
      if ((trzby_p-naklady_p) > 0) then
      zisk.font.color:=clgreen else if ((trzby_p-naklady_p) = 0) then
      zisk.font.color:=clDefault else zisk.font.color:=clred;
-     zisk.caption:=          'Zisk: '+IntToStr(trzby_p-naklady_p)+'€';
+     zisk.caption:=          'Zisk: '+FloatToStr(trzby_p-naklady_p)+'€';
 
 
 
@@ -613,7 +628,7 @@ for i:=1 to top_length do begin   //vynulovanie topp
      end;
   end;
   if not (pocet_nakupov = 0) then priemer_predaj:=suma_nakupov / pocet_nakupov else priemer_predaj:=0;
-  priemercena.caption:='Priemerna cena nakupu: '+FloattoStrF(priemer_predaj, ffGeneral, 3, 2)+'€';
+  priemercena.caption:='Priemerna cena nakupu: '+FloattoStrF(priemer_predaj*-1, ffFixed, 3, 2)+'€';
 
 
   id_nakupu:=0;
@@ -635,7 +650,7 @@ for i:=1 to top_length do begin   //vynulovanie topp
      end;
   end;
     if not (pocet_nakupov = 0) then priemer_kvantita:=pocet_v_nakupe / pocet_nakupov else priemer_kvantita:=0;
-    priemerkvantita.caption:='Priemerna kvantita nakupu: '+FloatToStrF(priemer_kvantita, ffGeneral, 3, 2);
+    priemerkvantita.caption:='Priemerna kvantita nakupu: '+FloattoStrF(priemer_kvantita, ffFixed, 3, 2);
 
 
 
@@ -652,8 +667,10 @@ var subor:textfile;
     pom_s:string;
     topp_local:array[1..1000] of nazvy_top;
     topp_local_length:integer;
-    i,j,temp_kod,temp_prijmy,temp_naklad,temp_zisk:integer;
+    i,j,temp_kod:integer;
+    temp_prijmy,temp_naklad,temp_zisk:real;
     temp_meno:string;
+    dokoncenenacitanie:boolean;
 begin
 //VYTVARANIE LOCAL TOP
 for i:=1 to ptovar_length do begin
@@ -715,26 +732,31 @@ For i := topp_local_length-1 DownTo 1 do
 
 
 //ZAPISOVANIE
-if topp_local_length > 5 then begin
-  AssignFile(subor,'TOP.txt');
-  Rewrite(subor);
-  For i:=1 to 5 do begin
-      WriteLn(subor,IntToStr(topp_local[i].kod));
+dokoncenenacitanie:=false;
+while not dokoncenenacitanie do
+begin
+  IF not FileExists(PATH+'TOP_LOCK.txt') then
+  begin
+    if topp_local_length > 5 then begin
+      AssignFile(subor,PATH+'TOP.txt');
+      Rewrite(subor);
+      For i:=1 to 5 do begin
+          WriteLn(subor,IntToStr(topp_local[i].kod));
+      end;
+      CloseFile(subor);
+
+      AssignFile(subor,PATH+'TOP_VERZIA.txt');
+      Reset(subor);
+      ReadLn(subor,pom_s);
+      verzia:=StrToInt(pom_s);
+      Inc(verzia);
+      CloseFile(subor);
+      Rewrite(subor);
+      WriteLn(subor,IntToStr(verzia));
+      CloseFile(subor);
+      dokoncenenacitanie:=true;
   end;
-  CloseFile(subor);
-
-  AssignFile(subor,'TOP_VERZIA.txt');
-  Reset(subor);
-  ReadLn(subor,pom_s);
-  verzia:=StrToInt(pom_s);
-  Inc(verzia);
-  CloseFile(subor);
-  Rewrite(subor);
-  WriteLn(subor,IntToStr(verzia));
-  CloseFile(subor);
-
-
-
+  end;
 end;
 end;
 
@@ -796,7 +818,7 @@ case filterP of
      1:filterB:=filter1.Checked;
      end;
 
-if (((StrToint(OddatumP) < stats[i].datum) AND (stats[i].datum < StrToInt(PodatumP))) AND (filterB)) then begin
+if (((StrToint(OddatumP) <= stats[i].datum) AND (stats[i].datum <= StrToInt(PodatumP))) AND (filterB)) then begin
      stats_filter[j].typ:=     stats[i].typ;
      stats_filter[j].id:=      stats[i].id;
      stats_filter[j].kod:=     stats[i].kod;
@@ -852,6 +874,27 @@ for i:=1 to 4 do begin
     end;
    end;
 
+end;
+
+procedure TForm1.DefaultViewbuttClick(Sender: TObject);
+begin
+  DefaultView;
+end;
+
+
+procedure TForm1.poT10buttClick(Sender: TObject);
+begin
+  poT10.click;
+end;
+
+procedure TForm1.casTimer(Sender: TObject);
+begin
+  label2.caption:=FormatDateTime('hh:nn:ss',time);
+end;
+
+procedure TForm1.Top10buttClick(Sender: TObject);
+begin
+  Top10.click;
 end;
 
 end.
