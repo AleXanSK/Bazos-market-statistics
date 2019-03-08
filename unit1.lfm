@@ -14,7 +14,7 @@ object Form1: TForm1
   Font.Quality = fqDraft
   Menu = MainMenu1
   OnCreate = FormCreate
-  LCLVersion = '1.4.4.0'
+  LCLVersion = '1.4.0.4'
   object Oddatum: TDateTimePicker
     Left = 24
     Height = 27

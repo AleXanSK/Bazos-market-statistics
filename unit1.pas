@@ -102,8 +102,8 @@ type
   public
 
   end;
-Const //PATH = 'Z:\INFProjekt2019\TimA\';
-      PATH = '';
+Const PATH = 'Z:\INFProjekt2019\TimA\';
+      //PATH = '';
 var
   Form1: TForm1;
   ver_stati:integer; //verzie databaz
@@ -571,8 +571,8 @@ end;
 
 procedure TForm1.top; {Pridava celkove naklady a celkove prijmy do top[i]}
 var i,j:integer;
-    naklady_p,trzby_p,zisk_p,priemerna_cena,priemerna_kvantita:real;
-    suma_nakupov,pocet_nakupov,id_nakupu,pocet_v_nakupe:integer;
+    naklady_p,trzby_p,zisk_p,priemerna_cena,priemerna_kvantita,suma_nakupov:real;
+    pocet_nakupov,id_nakupu,pocet_v_nakupe:integer;
     priemer_predaj, priemer_kvantita:currency;
     dokoncenenacitanie:boolean;
 begin

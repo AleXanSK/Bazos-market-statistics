@@ -102,8 +102,8 @@ type
   public
 
   end;
-Const //PATH = 'Z:\INFProjekt2019\TimA\';
-      PATH = '';
+Const PATH = 'Z:\INFProjekt2019\TimA\';
+      //PATH = '';
 var
   Form1: TForm1;
   ver_stati:integer; //verzie databaz
@@ -634,7 +634,7 @@ for i:=1 to top_length do begin   //vynulovanie topp
        inc(pocet_nakupov);
      end;
   end;
-  if not (pocet_nakupov = 0) then priemer_predaj:=suma_nakupov / pocet_nakupov else priemer_predaj:=0;
+  if not (pocet_nakupov = 0) then priemer_predaj:=(suma_nakupov / pocet_nakupov)/100 else priemer_predaj:=0;
   priemercena.caption:='Priemerna cena nakupu: '+FloattoStrF(priemer_predaj, ffFixed, 3, 2)+'€';
 
 
